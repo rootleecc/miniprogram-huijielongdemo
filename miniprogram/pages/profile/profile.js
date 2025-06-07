@@ -67,8 +67,120 @@ Page({
   },
 
   // 开始登录流程 - 自动显示设置界面
-  startLogin() {
+  async startLogin() {
     console.log('=== 开始登录流程 ===');
+    
+    wx.showLoading({ title: '正在获取用户信息...' });
+    
+    try {
+      // 尝试自动获取微信用户信息
+      const userInfo = await this.getWechatUserInfo();
+      
+      if (userInfo) {
+        // 成功获取到用户信息，直接完成登录
+        console.log('=== 自动获取用户信息成功 ===');
+        console.log('用户信息:', userInfo);
+        
+        this.setData({
+          userInfo: userInfo,
+          hasUserInfo: true
+        });
+        
+        // 保存到全局
+        const app = getApp();
+        app.globalData.userInfo = userInfo;
+        
+        // 获取OpenID，保存到云端，并加载用户数据
+        await this.getOpenId();
+        await this.saveUserInfoToCloud(userInfo);
+        await this.loadUserData();
+        
+        wx.hideLoading();
+        wx.showToast({
+          title: '登录成功',
+          icon: 'success'
+        });
+      } else {
+        // 无法自动获取，显示手动设置界面
+        wx.hideLoading();
+        this.showManualSetup();
+      }
+    } catch (error) {
+      console.error('自动获取用户信息失败:', error);
+      wx.hideLoading();
+      // 失败时显示手动设置界面
+      this.showManualSetup();
+    }
+  },
+
+  // 自动获取微信用户信息
+  async getWechatUserInfo() {
+    return new Promise((resolve) => {
+      // 尝试使用 wx.getUserInfo（需要用户已授权）
+      wx.getSetting({
+        success: (res) => {
+          if (res.authSetting['scope.userInfo']) {
+            // 用户已授权，直接获取用户信息
+            wx.getUserInfo({
+              success: (userRes) => {
+                console.log('=== 自动获取用户信息成功 ===');
+                console.log('用户信息:', userRes.userInfo);
+                
+                const userInfo = {
+                  nickName: userRes.userInfo.nickName,
+                  avatarUrl: userRes.userInfo.avatarUrl,
+                  gender: userRes.userInfo.gender || 0,
+                  city: userRes.userInfo.city || '',
+                  province: userRes.userInfo.province || '',
+                  country: userRes.userInfo.country || '',
+                  language: userRes.userInfo.language || 'zh_CN'
+                };
+                
+                resolve(userInfo);
+              },
+              fail: () => {
+                console.log('获取用户信息失败');
+                resolve(null);
+              }
+            });
+          } else {
+            // 用户未授权，尝试获取授权
+            wx.getUserProfile({
+              desc: '用于完善会员资料',
+              success: (userRes) => {
+                console.log('=== 授权获取用户信息成功 ===');
+                console.log('用户信息:', userRes.userInfo);
+                
+                const userInfo = {
+                  nickName: userRes.userInfo.nickName,
+                  avatarUrl: userRes.userInfo.avatarUrl,
+                  gender: userRes.userInfo.gender || 0,
+                  city: userRes.userInfo.city || '',
+                  province: userRes.userInfo.province || '',
+                  country: userRes.userInfo.country || '',
+                  language: userRes.userInfo.language || 'zh_CN'
+                };
+                
+                resolve(userInfo);
+              },
+              fail: () => {
+                console.log('用户拒绝授权');
+                resolve(null);
+              }
+            });
+          }
+        },
+        fail: () => {
+          console.log('获取设置失败');
+          resolve(null);
+        }
+      });
+    });
+  },
+
+  // 显示手动设置界面
+  showManualSetup() {
+    console.log('=== 显示手动设置界面 ===');
     
     // 初始化用户信息对象
     this.setData({
@@ -85,7 +197,7 @@ Page({
     });
     
     wx.showToast({
-      title: '请选择头像和昵称',
+      title: '请手动设置头像和昵称',
       icon: 'none'
     });
   },

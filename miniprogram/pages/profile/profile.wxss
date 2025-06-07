@@ -97,7 +97,15 @@ page {
   font-weight: 600;
   color: #1f2937;
   text-align: center;
+  margin-bottom: 15rpx;
+}
+
+.setup-desc {
+  font-size: 26rpx;
+  color: #6b7280;
+  text-align: center;
   margin-bottom: 40rpx;
+  line-height: 1.4;
 }
 
 /* 头像选择 */
