@@ -554,6 +554,41 @@ Page({
     }
   },
 
+  // 初始化数据库（调试用）
+  async initializeDatabase() {
+    wx.showLoading({ title: '初始化数据库...' });
+    
+    try {
+      const result = await wx.cloud.callFunction({
+        name: 'quickstartFunctions',
+        data: { type: 'initializeDatabase' }
+      });
+      
+      wx.hideLoading();
+      
+      if (result.result.success) {
+        wx.showModal({
+          title: '数据库初始化成功',
+          content: `${result.result.message}\n\n详情：\n${result.result.details.map(d => d.message).join('\n')}`,
+          showCancel: false
+        });
+      } else {
+        wx.showModal({
+          title: '数据库初始化失败',
+          content: result.result.message || '未知错误',
+          showCancel: false
+        });
+      }
+    } catch (error) {
+      wx.hideLoading();
+      console.error('初始化数据库失败:', error);
+      wx.showToast({
+        title: '初始化失败',
+        icon: 'none'
+      });
+    }
+  },
+
   // 导出数据
   async exportData() {
     // 记录导出行为

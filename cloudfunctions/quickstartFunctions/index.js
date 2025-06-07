@@ -442,6 +442,70 @@ const createDragonsCollection = async () => {
   }
 };
 
+// 创建用户信息表
+const createUsersCollection = async () => {
+  try {
+    // 创建 users 集合
+    await db.createCollection("users");
+    return {
+      success: true,
+      message: "users集合创建成功"
+    };
+  } catch (e) {
+    // 如果集合已经存在，返回成功
+    return {
+      success: true,
+      message: "users集合已存在或创建成功"
+    };
+  }
+};
+
+// 创建用户行为日志表
+const createUserLogsCollection = async () => {
+  try {
+    // 创建 user_logs 集合
+    await db.createCollection("user_logs");
+    return {
+      success: true,
+      message: "user_logs集合创建成功"
+    };
+  } catch (e) {
+    // 如果集合已经存在，返回成功
+    return {
+      success: true,
+      message: "user_logs集合已存在或创建成功"
+    };
+  }
+};
+
+// 初始化所有数据库表
+const initializeDatabase = async () => {
+  try {
+    const results = [];
+    
+    // 创建所有必要的集合
+    const dragonsResult = await createDragonsCollection();
+    results.push(dragonsResult);
+    
+    const usersResult = await createUsersCollection();
+    results.push(usersResult);
+    
+    const userLogsResult = await createUserLogsCollection();
+    results.push(userLogsResult);
+    
+    return {
+      success: true,
+      message: "数据库初始化完成",
+      details: results
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "数据库初始化失败",
+      error: error.message
+    };
+  }
+};
 // 创建销售数据集合（保留原有功能）
 const createSalesCollection = async () => {
   try {
@@ -576,6 +640,12 @@ exports.main = async (event, context) => {
       return await createCollection();
     case "createDragonsCollection":
       return await createDragonsCollection();
+    case "createUsersCollection":
+      return await createUsersCollection();
+    case "createUserLogsCollection":
+      return await createUserLogsCollection();
+    case "initializeDatabase":
+      return await initializeDatabase();
     case "createSalesCollection":
       return await createSalesCollection();
     case "selectRecord":
