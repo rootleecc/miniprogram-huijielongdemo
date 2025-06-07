@@ -100,12 +100,23 @@
 
     <!-- 功能菜单 -->
     <view class="menu-section">
+      <view class="menu-item" bindtap="exportData">
+        <view class="menu-item-content">
+          <text class="menu-text">数据导出</text>
+          <text class="menu-desc">导出我发起的接龙参与者信息</text>
+        </view>
+        <text class="menu-arrow">></text>
+      </view>
       <view class="menu-item" bindtap="contactService">
-        <text class="menu-text">联系客服</text>
+        <view class="menu-item-content">
+          <text class="menu-text">联系客服</text>
+        </view>
         <text class="menu-arrow">></text>
       </view>
       <view class="menu-item" bindtap="aboutUs">
-        <text class="menu-text">关于我们</text>
+        <view class="menu-item-content">
+          <text class="menu-text">关于我们</text>
+        </view>
         <text class="menu-arrow">></text>
       </view>
     </view>

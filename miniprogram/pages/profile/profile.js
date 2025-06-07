@@ -171,5 +171,151 @@ Page({
       content: '接龙购物小程序\n版本：1.0.0\n让社群团购更简单',
       showCancel: false
     });
+  },
+
+  // 导出数据
+  async exportData() {
+    if (this.data.myDragons.length === 0) {
+      wx.showToast({
+        title: '暂无数据可导出',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.showLoading({ title: '正在导出数据...' });
+
+    try {
+      const app = getApp();
+      const db = wx.cloud.database();
+      
+      // 获取所有我发起的接龙的详细信息
+      const dragonIds = this.data.myDragons.map(dragon => dragon._id);
+      const detailedDragons = await Promise.all(
+        dragonIds.map(id => db.collection('dragons').doc(id).get())
+      );
+
+      // 整理导出数据
+      let exportData = [];
+      let exportText = '接龙参与者数据导出\n\n';
+      
+      detailedDragons.forEach((dragonRes, index) => {
+        const dragon = dragonRes.data;
+        if (dragon.participants && dragon.participants.length > 0) {
+          exportText += `接龙名称：${dragon.title}\n`;
+          exportText += `创建时间：${dragon.createTime}\n`;
+          exportText += `参与人数：${dragon.participants.length}人\n`;
+          exportText += '参与者信息：\n';
+          exportText += '序号\t姓名\t联系方式\t备注\t参与时间\n';
+          
+          dragon.participants.forEach((participant, pIndex) => {
+            const participantData = {
+              dragonTitle: dragon.title,
+              dragonId: dragon._id,
+              序号: pIndex + 1,
+              姓名: participant.name || '未提供',
+              联系方式: participant.contactInfo || '未提供',
+              备注: participant.remark || '无',
+              参与时间: participant.participateTime || '未知',
+              商品信息: participant.items ? participant.items.map(item => 
+                `${item.goodsName} x${item.quantity}`
+              ).join(', ') : '无',
+              总金额: participant.totalAmount ? `¥${participant.totalAmount}` : '¥0'
+            };
+            
+            exportData.push(participantData);
+            
+            exportText += `${pIndex + 1}\t${participantData.姓名}\t${participantData.联系方式}\t${participantData.备注}\t${participantData.参与时间}\n`;
+          });
+          
+          exportText += '\n';
+        }
+      });
+
+      if (exportData.length === 0) {
+        wx.hideLoading();
+        wx.showToast({
+          title: '暂无参与者数据',
+          icon: 'none'
+        });
+        return;
+      }
+
+      // 显示导出选项
+      wx.hideLoading();
+      wx.showActionSheet({
+        itemList: ['复制到剪贴板', '查看详细数据'],
+        success: (res) => {
+          if (res.tapIndex === 0) {
+            // 复制到剪贴板
+            wx.setClipboardData({
+              data: exportText,
+              success: () => {
+                wx.showToast({
+                  title: '数据已复制到剪贴板',
+                  icon: 'success'
+                });
+              }
+            });
+          } else if (res.tapIndex === 1) {
+            // 显示详细数据
+            this.showExportDetail(exportData);
+          }
+        }
+      });
+
+    } catch (error) {
+      console.error('导出数据失败:', error);
+      wx.hideLoading();
+      wx.showToast({
+        title: '导出失败，请重试',
+        icon: 'none'
+      });
+    }
+  },
+
+  // 显示导出详情
+  showExportDetail(exportData) {
+    const totalParticipants = exportData.length;
+    const totalAmount = exportData.reduce((sum, item) => {
+      const amount = parseFloat(item.总金额.replace('¥', '')) || 0;
+      return sum + amount;
+    }, 0);
+
+    let detailText = `导出数据统计：\n`;
+    detailText += `总参与人数：${totalParticipants}人\n`;
+    detailText += `总交易金额：¥${totalAmount.toFixed(2)}\n\n`;
+    detailText += `详细信息：\n`;
+    
+    exportData.forEach((item, index) => {
+      detailText += `${index + 1}. ${item.姓名}\n`;
+      detailText += `   联系方式：${item.联系方式}\n`;
+      detailText += `   商品：${item.商品信息}\n`;
+      detailText += `   金额：${item.总金额}\n`;
+      if (item.备注 !== '无') {
+        detailText += `   备注：${item.备注}\n`;
+      }
+      detailText += `   时间：${item.参与时间}\n\n`;
+    });
+
+    wx.showModal({
+      title: '导出数据详情',
+      content: detailText,
+      confirmText: '复制全部',
+      cancelText: '关闭',
+      success: (res) => {
+        if (res.confirm) {
+          wx.setClipboardData({
+            data: detailText,
+            success: () => {
+              wx.showToast({
+                title: '详细数据已复制',
+                icon: 'success'
+              });
+            }
+          });
+        }
+      }
+    });
   }
 });

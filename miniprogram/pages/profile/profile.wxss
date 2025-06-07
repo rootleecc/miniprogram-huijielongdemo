@@ -302,9 +302,21 @@ page {
   background-color: #f9fafb;
 }
 
+.menu-item-content {
+  flex: 1;
+}
+
 .menu-text {
   font-size: 30rpx;
   color: #1f2937;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.menu-desc {
+  font-size: 24rpx;
+  color: #9ca3af;
+  line-height: 1.4;
 }
 
 .menu-arrow {
