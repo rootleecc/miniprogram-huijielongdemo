@@ -172,7 +172,16 @@ Page({
     // 获取OpenID，保存到云端，并加载用户数据
     this.getOpenId().then(async () => {
       // 保存用户信息到云端
-      await this.saveUserInfoToCloud(completeUserInfo);
+      const saveResult = await this.saveUserInfoToCloud(completeUserInfo);
+      
+      // 记录登录行为
+      await this.logUserAction('login', {
+        isNewUser: saveResult.isNewUser,
+        loginMethod: 'manual_setup',
+        hasAvatar: !!completeUserInfo.avatarUrl,
+        hasNickname: !!completeUserInfo.nickName
+      });
+      
       this.loadUserData();
     });
 
@@ -252,6 +261,12 @@ Page({
         app.globalData.userInfo = userInfo;
         console.log('从云端恢复用户信息成功:', userInfo);
         
+        // 记录用户访问行为
+        await this.logUserAction('app_visit', {
+          source: 'profile_page',
+          userRestored: true
+        });
+        
         return userInfo;
       } else {
         console.log('云端没有用户信息或获取失败:', res.result);
@@ -263,6 +278,23 @@ Page({
     }
   },
 
+  // 记录用户行为
+  async logUserAction(action, details = {}) {
+    try {
+      await wx.cloud.callFunction({
+        name: 'quickstartFunctions',
+        data: {
+          type: 'logUserAction',
+          action: action,
+          details: details,
+          page: 'profile',
+          userAgent: wx.getSystemInfoSync().platform
+        }
+      });
+    } catch (error) {
+      console.error('记录用户行为失败:', error);
+    }
+  },
   // 加载用户数据
   async loadUserData() {
     try {
@@ -405,6 +437,11 @@ Page({
 
   // 联系客服
   contactService() {
+    // 记录联系客服行为
+    this.logUserAction('contact_service', {
+      source: 'profile_menu'
+    });
+    
     wx.showModal({
       title: '联系客服',
       content: '如有问题，请联系客服微信：service123',
@@ -424,6 +461,11 @@ Page({
 
   // 关于我们
   aboutUs() {
+    // 记录查看关于我们行为
+    this.logUserAction('view_about', {
+      source: 'profile_menu'
+    });
+    
     wx.showModal({
       title: '关于我们',
       content: '接龙购物小程序\n版本：1.0.0\n让社群团购更简单',
@@ -433,6 +475,11 @@ Page({
 
   // 导出数据
   async exportData() {
+    // 记录导出行为
+    await this.logUserAction('export_data', {
+      dragonCount: this.data.myDragons.length
+    });
+    
     if (this.data.myDragons.length === 0) {
       wx.showToast({
         title: '暂无数据可导出',

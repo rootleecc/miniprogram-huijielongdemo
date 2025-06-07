@@ -257,7 +257,23 @@ Page({
 
       try {
         // 尝试添加接龙数据
-        await db.collection('dragons').add({ data: dragonData });
+        const addResult = await db.collection('dragons').add({ data: dragonData });
+        
+        // 记录创建接龙行为
+        await wx.cloud.callFunction({
+          name: 'quickstartFunctions',
+          data: {
+            type: 'logUserAction',
+            action: 'create_dragon',
+            details: {
+              dragonId: addResult._id,
+              title: dragonData.title,
+              goodsCount: dragonData.goods.length,
+              hasImages: dragonData.goods.some(item => item.images && item.images.length > 0)
+            },
+            page: 'create'
+          }
+        });
       } catch (dbError) {
         // 如果集合不存在，先创建集合再添加数据
         if (dbError.errCode === -502005) {
@@ -270,7 +286,24 @@ Page({
           });
           
           // 重新尝试添加数据
-          await db.collection('dragons').add({ data: dragonData });
+          const addResult = await db.collection('dragons').add({ data: dragonData });
+          
+          // 记录创建接龙行为
+          await wx.cloud.callFunction({
+            name: 'quickstartFunctions',
+            data: {
+              type: 'logUserAction',
+              action: 'create_dragon',
+              details: {
+                dragonId: addResult._id,
+                title: dragonData.title,
+                goodsCount: dragonData.goods.length,
+                hasImages: dragonData.goods.some(item => item.images && item.images.length > 0),
+                isFirstDragon: true
+              },
+              page: 'create'
+            }
+          });
         } else {
           throw dbError;
         }

@@ -179,6 +179,8 @@ Page({
       const dragonDoc = await db.collection('dragons').doc(this.data.dragonId).get();
       const existingParticipant = dragonDoc.data.participants?.find(p => p.openid === app.globalData.openid);
       
+      let actionType = 'participate_dragon';
+      
       if (existingParticipant) {
         // 更新现有参与记录
         await db.collection('dragons').doc(this.data.dragonId).update({
@@ -189,6 +191,7 @@ Page({
             updateTime: new Date().toLocaleString()
           }
         });
+        actionType = 'update_participation';
       } else {
         // 添加新的参与记录
         await db.collection('dragons').doc(this.data.dragonId).update({
@@ -200,6 +203,23 @@ Page({
         });
       }
 
+      // 记录参与行为
+      await wx.cloud.callFunction({
+        name: 'quickstartFunctions',
+        data: {
+          type: 'logUserAction',
+          action: actionType,
+          details: {
+            dragonId: this.data.dragonId,
+            dragonTitle: this.data.dragon.title,
+            itemCount: participationData.items.length,
+            totalAmount: participationData.totalAmount,
+            hasRemark: !!participationData.remark,
+            isUpdate: !!existingParticipant
+          },
+          page: 'participate'
+        }
+      });
       wx.hideLoading();
       wx.showToast({ title: '参与成功' });
       

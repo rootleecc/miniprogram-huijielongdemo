@@ -12,6 +12,12 @@ Page({
     if (options.id) {
       this.setData({ dragonId: options.id });
       this.loadDragonDetail();
+      
+      // 记录查看详情行为
+      this.logUserAction('view_dragon_detail', {
+        dragonId: options.id,
+        source: 'direct_link'
+      });
     }
   },
 
@@ -84,6 +90,11 @@ Page({
       return;
     }
 
+    // 记录点击参与行为
+    this.logUserAction('click_participate', {
+      dragonId: this.data.dragonId,
+      dragonTitle: this.data.dragon.title
+    });
     wx.navigateTo({
       url: `/pages/participate/participate?id=${this.data.dragonId}`
     });
@@ -120,6 +131,13 @@ Page({
 
   // 联系发起人
   contactCreator() {
+    // 记录联系发起人行为
+    this.logUserAction('contact_creator', {
+      dragonId: this.data.dragonId,
+      dragonTitle: this.data.dragon.title,
+      creatorName: this.data.dragon.creatorName
+    });
+    
     wx.showModal({
       title: '联系发起人',
       content: `联系方式：${this.data.dragon.contactInfo}`,
@@ -137,9 +155,33 @@ Page({
     });
   },
 
+  // 记录用户行为
+  async logUserAction(action, details = {}) {
+    try {
+      await wx.cloud.callFunction({
+        name: 'quickstartFunctions',
+        data: {
+          type: 'logUserAction',
+          action: action,
+          details: details,
+          page: 'detail',
+          userAgent: wx.getSystemInfoSync().platform
+        }
+      });
+    } catch (error) {
+      console.error('记录用户行为失败:', error);
+    }
+  },
   // 预览图片
   previewImage(e) {
     const { current, urls } = e.currentTarget.dataset;
+    
+    // 记录预览图片行为
+    this.logUserAction('preview_image', {
+      dragonId: this.data.dragonId,
+      imageUrl: current
+    });
+    
     wx.previewImage({
       current: current,
       urls: urls

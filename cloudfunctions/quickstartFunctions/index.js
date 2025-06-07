@@ -32,20 +32,46 @@ const getUserInfo = async (event) => {
         province: event.userInfo.province || '',
         country: event.userInfo.country || '',
         language: event.userInfo.language || 'zh_CN',
-        updateTime: new Date().toISOString()
+        updateTime: new Date().toISOString(),
+        lastLoginTime: new Date().toISOString(),
+        loginCount: 1
       };
       
       // 保存或更新用户信息到数据库
       try {
-        await db.collection('users').doc(wxContext.OPENID).set({
-          data: userInfo
-        });
+        // 先检查用户是否已存在
+        const existingUser = await db.collection('users').doc(wxContext.OPENID).get();
+        
+        if (existingUser.data) {
+          // 用户已存在，更新信息并增加登录次数
+          await db.collection('users').doc(wxContext.OPENID).update({
+            data: {
+              ...userInfo,
+              loginCount: db.command.inc(1),
+              lastLoginTime: new Date().toISOString(),
+              updateTime: new Date().toISOString()
+            }
+          });
+        } else {
+          // 新用户，创建记录
+          await db.collection('users').doc(wxContext.OPENID).set({
+            data: {
+              ...userInfo,
+              createTime: new Date().toISOString(),
+              firstLoginTime: new Date().toISOString()
+            }
+          });
+        }
       } catch (dbError) {
         // 如果集合不存在，先创建
         if (dbError.errCode === -502005) {
           await db.createCollection('users');
           await db.collection('users').doc(wxContext.OPENID).set({
-            data: userInfo
+            data: {
+              ...userInfo,
+              createTime: new Date().toISOString(),
+              firstLoginTime: new Date().toISOString()
+            }
           });
         }
       }
@@ -53,12 +79,23 @@ const getUserInfo = async (event) => {
       return {
         success: true,
         userInfo: userInfo,
-        openid: wxContext.OPENID
+        openid: wxContext.OPENID,
+        isNewUser: !existingUser.data
       };
     } else {
       // 从数据库获取用户信息
       try {
         const result = await db.collection('users').doc(wxContext.OPENID).get();
+        
+        // 更新最后访问时间
+        if (result.data) {
+          await db.collection('users').doc(wxContext.OPENID).update({
+            data: {
+              lastAccessTime: new Date().toISOString()
+            }
+          });
+        }
+        
         return {
           success: true,
           userInfo: result.data,
@@ -90,6 +127,97 @@ const getUserInfo = async (event) => {
   }
 };
 
+// 记录用户行为日志
+const logUserAction = async (event) => {
+  try {
+    const wxContext = cloud.getWXContext();
+    
+    const logData = {
+      openid: wxContext.OPENID,
+      action: event.action, // 'login', 'create_dragon', 'participate', 'view_detail' 等
+      details: event.details || {},
+      timestamp: new Date().toISOString(),
+      userAgent: event.userAgent || '',
+      page: event.page || ''
+    };
+    
+    try {
+      await db.collection('user_logs').add({
+        data: logData
+      });
+    } catch (dbError) {
+      // 如果集合不存在，先创建
+      if (dbError.errCode === -502005) {
+        await db.createCollection('user_logs');
+        await db.collection('user_logs').add({
+          data: logData
+        });
+      }
+    }
+    
+    return {
+      success: true,
+      message: '行为日志记录成功'
+    };
+  } catch (error) {
+    console.error('记录用户行为失败:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};
+
+// 获取用户统计信息
+const getUserStats = async () => {
+  try {
+    const wxContext = cloud.getWXContext();
+    
+    // 获取用户基本信息
+    const userInfo = await db.collection('users').doc(wxContext.OPENID).get();
+    
+    // 获取用户发起的接龙数量
+    const myDragonsCount = await db.collection('dragons')
+      .where({
+        creatorOpenId: wxContext.OPENID
+      })
+      .count();
+    
+    // 获取用户参与的接龙数量
+    const myParticipationsCount = await db.collection('dragons')
+      .where({
+        'participants.openid': wxContext.OPENID
+      })
+      .count();
+    
+    // 获取最近的行为日志
+    const recentLogs = await db.collection('user_logs')
+      .where({
+        openid: wxContext.OPENID
+      })
+      .orderBy('timestamp', 'desc')
+      .limit(10)
+      .get();
+    
+    return {
+      success: true,
+      data: {
+        userInfo: userInfo.data,
+        myDragonsCount: myDragonsCount.total,
+        myParticipationsCount: myParticipationsCount.total,
+        recentActions: recentLogs.data,
+        openid: wxContext.OPENID
+      }
+    };
+  } catch (error) {
+    console.error('获取用户统计信息失败:', error);
+    return {
+      success: false,
+      error: error.message,
+      openid: wxContext.OPENID
+    };
+  }
+};
 // 获取小程序二维码
 const getMiniProgramCode = async () => {
   // 获取小程序二维码的buffer
@@ -428,6 +556,10 @@ exports.main = async (event, context) => {
       return await getOpenId();
     case "getUserInfo":
       return await getUserInfo(event);
+    case "logUserAction":
+      return await logUserAction(event);
+    case "getUserStats":
+      return await getUserStats();
     case "getMiniProgramCode":
       return await getMiniProgramCode();
     case "createCollection":
