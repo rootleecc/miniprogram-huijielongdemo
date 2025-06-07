@@ -175,12 +175,16 @@ Page({
       const saveResult = await this.saveUserInfoToCloud(completeUserInfo);
       
       // 记录登录行为
-      await this.logUserAction('login', {
-        isNewUser: saveResult && saveResult.isNewUser,
-        loginMethod: 'manual_setup',
-        hasAvatar: !!completeUserInfo.avatarUrl,
-        hasNickname: !!completeUserInfo.nickName
-      });
+      try {
+        await this.logUserAction('login', {
+          isNewUser: saveResult && saveResult.isNewUser,
+          loginMethod: 'manual_setup',
+          hasAvatar: !!completeUserInfo.avatarUrl,
+          hasNickname: !!completeUserInfo.nickName
+        });
+      } catch (logError) {
+        console.error('记录登录行为失败:', logError);
+      }
       
       this.loadUserData();
     });
@@ -229,7 +233,13 @@ Page({
       });
       
       console.log('云端保存结果:', res);
-      return res.result || { success: false, isNewUser: false };
+      
+      // 确保返回值不为null
+      if (res && res.result) {
+        return res.result;
+      } else {
+        return { success: false, isNewUser: false, error: '云函数返回结果为空' };
+      }
     } catch (error) {
       console.error('保存用户信息失败:', error);
       return { success: false, error: error.message, isNewUser: false };
@@ -249,7 +259,7 @@ Page({
       console.log('云端用户信息:', res);
       
       // 检查返回结果是否有效
-      if (res.result && res.result.success && res.result.userInfo) {
+      if (res && res.result && res.result.success && res.result.userInfo) {
         const userInfo = res.result.userInfo;
         this.setData({
           userInfo: userInfo,
@@ -269,7 +279,7 @@ Page({
         
         return userInfo;
       } else {
-        console.log('云端没有用户信息或获取失败:', res.result);
+        console.log('云端没有用户信息或获取失败:', res ? res.result : 'res为null');
         return null;
       }
     } catch (error) {
@@ -568,7 +578,7 @@ Page({
       
       wx.hideLoading();
       
-      if (result.result && result.result.success) {
+      if (result && result.result && result.result.success) {
         wx.showModal({
           title: '数据库初始化成功',
           content: `${result.result.message}\n\n详情：\n${result.result.details ? result.result.details.map(d => d.message).join('\n') : '无详情'}`,
@@ -577,7 +587,7 @@ Page({
       } else {
         wx.showModal({
           title: '数据库初始化失败',
-          content: (result.result && result.result.message) || '云函数调用失败',
+          content: (result && result.result && result.result.message) || '云函数调用失败或返回结果为空',
           showCancel: false
         });
       }
