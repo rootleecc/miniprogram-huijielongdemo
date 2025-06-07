@@ -4,11 +4,11 @@
   <view class="header">
     <view class="header-content">
       <view class="header-icon">
-        <text class="icon-text">🛒</text>
+        <text class="icon-text">🔨</text>
       </view>
       <view class="header-text">
         <text class="title">发起接龙</text>
-        <text class="subtitle">创建团购活动，邀请好友参与</text>
+        <text class="subtitle">创建拍卖活动，邀请好友参与</text>
       </view>
     </view>
     <view class="header-wave"></view>
