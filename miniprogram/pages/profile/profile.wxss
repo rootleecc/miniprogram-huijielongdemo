@@ -101,7 +101,6 @@ page {
   opacity: 0.8;
 }
 
-
 /* 数据统计 */
 .stats-section {
   background: white;
