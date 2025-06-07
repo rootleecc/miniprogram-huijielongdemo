@@ -3,37 +3,44 @@
   <!-- 未登录状态 -->
   <view class="login-section" wx:if="{{!hasUserInfo}}">
     <view class="login-card">
-      <!-- 头像选择 -->
-      <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-        <image class="login-avatar" src="{{userInfo.avatarUrl || '../../images/icons/avatar.png'}}" mode="aspectFill"></image>
-        <view class="avatar-tip">点击选择头像</view>
-      </button>
-      
-      <!-- 昵称输入 -->
-      <view class="nickname-wrapper">
-        <input 
-          class="nickname-input" 
-          type="nickname" 
-          placeholder="请输入昵称" 
-          value="{{userInfo.nickName}}"
-          bind:blur="onNicknameBlur"
-          bind:input="onNicknameInput"
-          maxlength="20"
-        />
-      </view>
-      
       <text class="login-title">欢迎使用接龙购物</text>
       <text class="login-desc">登录后可查看我的接龙和参与记录</text>
       
-      <!-- 登录按钮 -->
-      <button class="login-btn" bindtap="completeProfile">
-        <text class="login-btn-text">完成登录</text>
+      <!-- 主要登录按钮 - 微信一键登录 -->
+      <button class="login-btn" wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">
+        <text class="login-btn-text">微信一键登录</text>
       </button>
       
-      <!-- 备用登录方式 -->
-      <button class="old-login-btn" wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">
-        <text class="old-login-text">使用旧版登录</text>
+      <!-- 备用登录方式 - 手动设置头像昵称 -->
+      <button class="manual-login-btn" bindtap="startWechatLogin">
+        <text class="manual-login-text">手动设置头像昵称</text>
       </button>
+      
+      <!-- 手动设置区域（当用户选择手动设置时显示） -->
+      <view class="manual-setup" wx:if="{{showManualSetup}}">
+        <!-- 头像选择 -->
+        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+          <image class="login-avatar" src="{{userInfo.avatarUrl || '../../images/icons/avatar.png'}}" mode="aspectFill"></image>
+          <view class="avatar-tip">点击选择头像</view>
+        </button>
+        
+        <!-- 昵称输入 -->
+        <view class="nickname-wrapper">
+          <input 
+            class="nickname-input" 
+            type="nickname" 
+            placeholder="请输入昵称" 
+            value="{{userInfo.nickName}}"
+            bind:blur="onNicknameBlur"
+            bind:input="onNicknameInput"
+            maxlength="20"
+          />
+        </view>
+        
+        <button class="complete-btn" bindtap="completeProfile">
+          <text class="complete-btn-text">完成设置</text>
+        </button>
+      </view>
     </view>
   </view>
 

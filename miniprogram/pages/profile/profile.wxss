@@ -32,14 +32,6 @@ page {
   box-sizing: border-box;
 }
 
-.login-avatar {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 60rpx;
-  margin-bottom: 40rpx;
-  background: #f3f4f6;
-}
-
 .login-title {
   display: block;
   font-size: 40rpx;
@@ -56,6 +48,7 @@ page {
   line-height: 1.6;
 }
 
+/* 主要登录按钮 */
 .login-btn {
   background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
   color: white;
@@ -71,10 +64,34 @@ page {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  margin-bottom: 20rpx;
 }
 
 .login-btn-text {
   color: white;
+}
+
+/* 备用登录按钮 */
+.manual-login-btn {
+  background: transparent;
+  color: #6b7280;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 50rpx;
+  padding: 25rpx 40rpx;
+  font-size: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.manual-login-text {
+  color: #6b7280;
+}
+
+/* 手动设置区域 */
+.manual-setup {
+  margin-top: 40rpx;
+  padding-top: 40rpx;
+  border-top: 2rpx solid #f3f4f6;
 }
 
 /* 头像选择 */
@@ -88,6 +105,13 @@ page {
 
 .avatar-wrapper::after {
   border: none;
+}
+
+.login-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  background: #f3f4f6;
 }
 
 .avatar-tip {
@@ -119,21 +143,26 @@ page {
   background: white;
 }
 
-/* 备用登录按钮 */
-.old-login-btn {
-  background: transparent;
-  color: #6b7280;
-  border: 2rpx solid #e5e7eb;
+/* 完成按钮 */
+.complete-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
   border-radius: 50rpx;
-  padding: 25rpx 40rpx;
-  font-size: 28rpx;
+  padding: 35rpx 40rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 8rpx 24rpx rgba(16, 185, 129, 0.3);
   width: 100%;
-  margin-top: 20rpx;
+  min-height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
 }
 
-.old-login-text {
-  color: #6b7280;
+.complete-btn-text {
+  color: white;
 }
 
 /* 用户信息卡片 */

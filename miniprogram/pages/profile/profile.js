@@ -4,10 +4,6 @@ Page({
     userInfo: null,
     hasUserInfo: false,
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
-    tempUserInfo: {
-      avatarUrl: '',
-      nickName: ''
-    },
     myDragons: [],
     myParticipations: [],
     loading: false,
@@ -21,18 +17,6 @@ Page({
     console.log('=== Profile页面加载 ===');
     console.log('全局用户信息:', app.globalData.userInfo);
     console.log('全局OpenID:', app.globalData.openid);
-    
-    // 初始化临时用户信息
-    this.setData({
-      tempUserInfo: {
-        avatarUrl: '',
-        nickName: ''
-      },
-      userInfo: {
-        avatarUrl: '',
-        nickName: ''
-      }
-    });
     
     if (app.globalData.userInfo) {
       this.setData({
@@ -82,7 +66,7 @@ Page({
     }
   },
 
-  // 微信一键登录
+  // 微信一键登录 - 自动获取头像和昵称
   getUserProfile() {
     wx.getUserProfile({
       desc: '用于完善会员资料',
@@ -96,18 +80,30 @@ Page({
         console.log('省份:', res.userInfo.province);
         console.log('国家:', res.userInfo.country);
         
+        // 直接使用微信返回的用户信息
+        const userInfo = {
+          nickName: res.userInfo.nickName,
+          avatarUrl: res.userInfo.avatarUrl,
+          gender: res.userInfo.gender || 0,
+          city: res.userInfo.city || '',
+          province: res.userInfo.province || '',
+          country: res.userInfo.country || '',
+          language: res.userInfo.language || 'zh_CN'
+        };
+
         this.setData({
-          userInfo: res.userInfo,
+          userInfo: userInfo,
           hasUserInfo: true
         });
         
         // 保存到全局
         const app = getApp();
-        app.globalData.userInfo = res.userInfo;
+        app.globalData.userInfo = userInfo;
         console.log('全局用户信息已保存:', app.globalData.userInfo);
         
-        // 获取OpenID
-        this.getOpenId().then(() => {
+        // 获取OpenID并保存到云端
+        this.getOpenId().then(async () => {
+          await this.saveUserInfoToCloud(userInfo);
           this.loadUserData();
         });
         
@@ -126,6 +122,29 @@ Page({
     });
   },
 
+  // 新版微信登录 - 使用头像昵称填写能力
+  startWechatLogin() {
+    // 显示提示，引导用户使用新的登录方式
+    wx.showModal({
+      title: '登录提示',
+      content: '请点击头像选择您的微信头像，并填写昵称完成登录',
+      confirmText: '开始设置',
+      cancelText: '使用旧版',
+      success: (res) => {
+        if (res.confirm) {
+          // 用户选择使用新版登录方式，不做任何操作，让用户手动选择
+          wx.showToast({
+            title: '请选择头像和昵称',
+            icon: 'none'
+          });
+        } else {
+          // 用户选择使用旧版登录
+          this.getUserProfile();
+        }
+      }
+    });
+  },
+
   // 选择头像回调
   onChooseAvatar(e) {
     console.log('=== 选择头像 ===');
@@ -133,7 +152,6 @@ Page({
     
     const { avatarUrl } = e.detail;
     this.setData({
-      'tempUserInfo.avatarUrl': avatarUrl,
       userInfo: {
         ...this.data.userInfo,
         avatarUrl: avatarUrl
@@ -145,7 +163,6 @@ Page({
   onNicknameInput(e) {
     const nickName = e.detail.value;
     this.setData({
-      'tempUserInfo.nickName': nickName,
       userInfo: {
         ...this.data.userInfo,
         nickName: nickName
@@ -160,7 +177,6 @@ Page({
     
     const nickName = e.detail.value.trim();
     this.setData({
-      'tempUserInfo.nickName': nickName,
       userInfo: {
         ...this.data.userInfo,
         nickName: nickName
@@ -170,10 +186,10 @@ Page({
 
   // 完成用户信息设置
   completeProfile() {
-    const { tempUserInfo } = this.data;
+    const { userInfo } = this.data;
     
     // 验证必填信息
-    if (!tempUserInfo.nickName || tempUserInfo.nickName.trim() === '') {
+    if (!userInfo.nickName || userInfo.nickName.trim() === '') {
       wx.showToast({
         title: '请输入昵称',
         icon: 'none'
@@ -182,36 +198,36 @@ Page({
     }
 
     console.log('=== 完成用户信息设置 ===');
-    console.log('临时用户信息:', tempUserInfo);
+    console.log('用户信息:', userInfo);
 
     // 构建完整用户信息
-    const userInfo = {
-      nickName: tempUserInfo.nickName.trim(),
-      avatarUrl: tempUserInfo.avatarUrl || '../../images/icons/avatar.png',
-      gender: 0,
-      city: '',
-      province: '',
-      country: '',
-      language: 'zh_CN'
+    const completeUserInfo = {
+      nickName: userInfo.nickName.trim(),
+      avatarUrl: userInfo.avatarUrl || '../../images/icons/avatar.png',
+      gender: userInfo.gender || 0,
+      city: userInfo.city || '',
+      province: userInfo.province || '',
+      country: userInfo.country || '',
+      language: userInfo.language || 'zh_CN'
     };
 
-    console.log('完整用户信息:', userInfo);
+    console.log('完整用户信息:', completeUserInfo);
 
     // 保存用户信息
     this.setData({
-      userInfo: userInfo,
+      userInfo: completeUserInfo,
       hasUserInfo: true
     });
 
     // 保存到全局
     const app = getApp();
-    app.globalData.userInfo = userInfo;
+    app.globalData.userInfo = completeUserInfo;
     console.log('全局用户信息已保存:', app.globalData.userInfo);
 
     // 获取OpenID，保存到云端，并加载用户数据
     this.getOpenId().then(async () => {
       // 保存用户信息到云端
-      await this.saveUserInfoToCloud(userInfo);
+      await this.saveUserInfoToCloud(completeUserInfo);
       this.loadUserData();
     });
 
