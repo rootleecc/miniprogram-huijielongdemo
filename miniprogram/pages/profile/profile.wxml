@@ -28,43 +28,48 @@
     <!-- 数据统计 -->
     <view class="stats-section">
       <view class="stats-item">
-        <text class="stats-number">{{myDragons.length}}</text>
+        <text class="stats-number">{{myDragonsCount || 0}}</text>
         <text class="stats-label">发起的接龙</text>
       </view>
       <view class="stats-divider"></view>
       <view class="stats-item">
-        <text class="stats-number">{{myParticipations.length}}</text>
+        <text class="stats-number">{{myParticipationsCount || 0}}</text>
         <text class="stats-label">参与的接龙</text>
       </view>
     </view>
 
     <!-- 我的接龙 -->
     <view class="section">
-      <view class="section-header">
+      <view class="section-header" bindtap="toggleMyDragons">
         <text class="section-title">我发起的接龙</text>
-        <text class="section-more" wx:if="{{myDragons.length > 0}}">查看全部</text>
+        <view class="section-toggle">
+          <text class="section-count">{{myDragonsCount || 0}}个</text>
+          <text class="section-arrow {{showMyDragons ? 'expanded' : ''}}">></text>
+        </view>
       </view>
       
-      <view class="loading" wx:if="{{loading}}">
-        <text>加载中...</text>
-      </view>
-      
-      <view class="empty-state" wx:elif="{{myDragons.length === 0}}">
-        <image class="empty-icon" src="../../images/default-goods-image.png"></image>
-        <text class="empty-text">还没有发起过接龙</text>
-      </view>
-      
-      <view class="dragon-list" wx:else>
-        <view class="dragon-item" wx:for="{{myDragons}}" wx:key="_id" bindtap="viewDragon" data-id="{{item._id}}">
-          <view class="dragon-header">
-            <text class="dragon-title">{{item.title}}</text>
-            <view class="dragon-status {{item.status === 'active' ? 'active' : 'ended'}}">
-              {{item.status === 'active' ? '进行中' : '已结束'}}
+      <view class="section-content" wx:if="{{showMyDragons}}">
+        <view class="loading" wx:if="{{loading}}">
+          <text>加载中...</text>
+        </view>
+        
+        <view class="empty-state" wx:elif="{{myDragons.length === 0}}">
+          <image class="empty-icon" src="../../images/default-goods-image.png"></image>
+          <text class="empty-text">还没有发起过接龙</text>
+        </view>
+        
+        <view class="dragon-list" wx:else>
+          <view class="dragon-item" wx:for="{{myDragons}}" wx:key="_id" bindtap="viewDragon" data-id="{{item._id}}">
+            <view class="dragon-header">
+              <text class="dragon-title">{{item.title}}</text>
+              <view class="dragon-status {{item.status === 'active' ? 'active' : 'ended'}}">
+                {{item.status === 'active' ? '进行中' : '已结束'}}
+              </view>
             </view>
-          </view>
-          <view class="dragon-info">
-            <text class="dragon-participants">{{item.participantCount || 0}}人参与</text>
-            <text class="dragon-time">{{item.createTime}}</text>
+            <view class="dragon-info">
+              <text class="dragon-participants">{{item.participantCount || 0}}人参与</text>
+              <text class="dragon-time">{{item.createTime}}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -72,27 +77,36 @@
 
     <!-- 我参与的接龙 -->
     <view class="section">
-      <view class="section-header">
+      <view class="section-header" bindtap="toggleMyParticipations">
         <text class="section-title">我参与的接龙</text>
-        <text class="section-more" wx:if="{{myParticipations.length > 0}}">查看全部</text>
+        <view class="section-toggle">
+          <text class="section-count">{{myParticipationsCount || 0}}个</text>
+          <text class="section-arrow {{showMyParticipations ? 'expanded' : ''}}">></text>
+        </view>
       </view>
       
-      <view class="empty-state" wx:if="{{myParticipations.length === 0 && !loading}}">
-        <image class="empty-icon" src="../../images/default-goods-image.png"></image>
-        <text class="empty-text">还没有参与过接龙</text>
-      </view>
-      
-      <view class="dragon-list" wx:else>
-        <view class="dragon-item" wx:for="{{myParticipations}}" wx:key="_id" bindtap="viewDragon" data-id="{{item._id}}">
-          <view class="dragon-header">
-            <text class="dragon-title">{{item.title}}</text>
-            <view class="dragon-status {{item.status === 'active' ? 'active' : 'ended'}}">
-              {{item.status === 'active' ? '进行中' : '已结束'}}
+      <view class="section-content" wx:if="{{showMyParticipations}}">
+        <view class="loading" wx:if="{{loading}}">
+          <text>加载中...</text>
+        </view>
+        
+        <view class="empty-state" wx:elif="{{myParticipations.length === 0}}">
+          <image class="empty-icon" src="../../images/default-goods-image.png"></image>
+          <text class="empty-text">还没有参与过接龙</text>
+        </view>
+        
+        <view class="dragon-list" wx:else>
+          <view class="dragon-item" wx:for="{{myParticipations}}" wx:key="_id" bindtap="viewDragon" data-id="{{item._id}}">
+            <view class="dragon-header">
+              <text class="dragon-title">{{item.title}}</text>
+              <view class="dragon-status {{item.status === 'active' ? 'active' : 'ended'}}">
+                {{item.status === 'active' ? '进行中' : '已结束'}}
+              </view>
             </view>
-          </view>
-          <view class="dragon-info">
-            <text class="dragon-creator">发起人：{{item.creatorName}}</text>
-            <text class="dragon-time">{{item.updateTime}}</text>
+            <view class="dragon-info">
+              <text class="dragon-creator">发起人：{{item.creatorName}}</text>
+              <text class="dragon-time">{{item.updateTime}}</text>
+            </view>
           </view>
         </view>
       </view>

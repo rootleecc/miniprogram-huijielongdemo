@@ -6,7 +6,9 @@ Page({
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     myDragons: [],
     myParticipations: [],
-    loading: false
+    loading: false,
+    showMyDragons: false,
+    showMyParticipations: false
   },
 
   onLoad() {
@@ -23,6 +25,26 @@ Page({
   onShow() {
     if (this.data.hasUserInfo) {
       this.loadUserData();
+    }
+  },
+
+  // 切换我发起的接龙显示状态
+  toggleMyDragons() {
+    const showMyDragons = !this.data.showMyDragons;
+    this.setData({ showMyDragons });
+    
+    if (showMyDragons && this.data.myDragons.length === 0) {
+      this.loadMyDragons();
+    }
+  },
+
+  // 切换我参与的接龙显示状态
+  toggleMyParticipations() {
+    const showMyParticipations = !this.data.showMyParticipations;
+    this.setData({ showMyParticipations });
+    
+    if (showMyParticipations && this.data.myParticipations.length === 0) {
+      this.loadMyParticipations();
     }
   },
 
@@ -98,18 +120,71 @@ Page({
 
   // 加载用户数据
   async loadUserData() {
-    this.setData({ loading: true });
-    
     try {
       const app = getApp();
       if (!app.globalData.openid) {
         await this.getOpenId();
       }
+      // 只获取统计数据，不加载具体列表
+      await this.loadStatistics();
+    } catch (error) {
+      console.error('加载用户数据失败:', error);
+      wx.showToast({
+        title: '加载失败',
+        icon: 'none'
+      });
+    }
+  },
 
+  // 加载统计数据
+  async loadStatistics() {
+    try {
+      const app = getApp();
       const db = wx.cloud.database();
       
       try {
-        // 获取我发起的接龙
+        // 只获取数量统计
+        const myDragonsCount = await db.collection('dragons')
+          .where({
+            creatorOpenId: app.globalData.openid
+          })
+          .count();
+
+        const myParticipationsCount = await db.collection('dragons')
+          .where({
+            'participants.openid': app.globalData.openid
+          })
+          .count();
+
+        this.setData({
+          myDragonsCount: myDragonsCount.total,
+          myParticipationsCount: myParticipationsCount.total
+        });
+      } catch (dbError) {
+        // 如果是集合不存在的错误，设置为0
+        if (dbError.errCode === -502005) {
+          this.setData({
+            myDragonsCount: 0,
+            myParticipationsCount: 0
+          });
+        } else {
+          throw dbError;
+        }
+      }
+    } catch (error) {
+      console.error('加载统计数据失败:', error);
+    }
+  },
+
+  // 加载我发起的接龙
+  async loadMyDragons() {
+    this.setData({ loading: true });
+    
+    try {
+      const app = getApp();
+      const db = wx.cloud.database();
+      
+      try {
         const myDragonsRes = await db.collection('dragons')
           .where({
             creatorOpenId: app.globalData.openid
@@ -118,7 +193,35 @@ Page({
           .limit(10)
           .get();
 
-        // 获取我参与的接龙
+        this.setData({
+          myDragons: myDragonsRes.data,
+          loading: false
+        });
+      } catch (dbError) {
+        if (dbError.errCode === -502005) {
+          this.setData({
+            myDragons: [],
+            loading: false
+          });
+        } else {
+          throw dbError;
+        }
+      }
+    } catch (error) {
+      console.error('加载我发起的接龙失败:', error);
+      this.setData({ loading: false });
+    }
+  },
+
+  // 加载我参与的接龙
+  async loadMyParticipations() {
+    this.setData({ loading: true });
+    
+    try {
+      const app = getApp();
+      const db = wx.cloud.database();
+      
+      try {
         const myParticipationsRes = await db.collection('dragons')
           .where({
             'participants.openid': app.globalData.openid
@@ -128,16 +231,12 @@ Page({
           .get();
 
         this.setData({
-          myDragons: myDragonsRes.data,
           myParticipations: myParticipationsRes.data,
           loading: false
         });
       } catch (dbError) {
-        // 如果是集合不存在的错误，初始化为空数组
         if (dbError.errCode === -502005) {
-          console.log('数据库集合不存在，将在首次创建接龙时自动创建');
           this.setData({
-            myDragons: [],
             myParticipations: [],
             loading: false
           });
@@ -146,12 +245,8 @@ Page({
         }
       }
     } catch (error) {
-      console.error('加载用户数据失败:', error);
+      console.error('加载我参与的接龙失败:', error);
       this.setData({ loading: false });
-      wx.showToast({
-        title: '加载失败',
-        icon: 'none'
-      });
     }
   },
 

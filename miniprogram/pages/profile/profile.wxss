@@ -55,11 +55,17 @@ page {
   background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
   color: white;
   border-radius: 50rpx;
-  padding: 28rpx 60rpx;
+  padding: 35rpx 80rpx;
   font-size: 32rpx;
   font-weight: 500;
   border: none;
   box-shadow: 0 8rpx 24rpx rgba(0, 82, 217, 0.3);
+  width: 100%;
+  max-width: 500rpx;
+  min-height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-btn-text {
@@ -153,8 +159,14 @@ page {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30rpx 30rpx 20rpx;
+  padding: 30rpx;
   border-bottom: 2rpx solid #f3f4f6;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.section-header:active {
+  background-color: #f9fafb;
 }
 
 .section-title {
@@ -163,9 +175,31 @@ page {
   color: #1f2937;
 }
 
-.section-more {
+.section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 15rpx;
+}
+
+.section-count {
   font-size: 26rpx;
-  color: #0052D9;
+  color: #6b7280;
+}
+
+.section-arrow {
+  font-size: 24rpx;
+  color: #9ca3af;
+  transition: transform 0.3s ease;
+  transform: rotate(0deg);
+}
+
+.section-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+/* 内容区域 */
+.section-content {
+  border-top: 2rpx solid #f3f4f6;
 }
 
 /* 加载和空状态 */
