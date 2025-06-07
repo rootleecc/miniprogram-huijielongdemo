@@ -19,8 +19,8 @@ const getOpenId = async () => {
 // 获取用户信息（通过云函数）
 const getUserInfo = async (event) => {
   try {
-    const wxContext = cloud.getWXContext();
     console.log('=== getUserInfo云函数开始 ===');
+    const wxContext = cloud.getWXContext();
     console.log('OpenID:', wxContext.OPENID);
     console.log('传入的用户信息:', event.userInfo);
     
@@ -164,8 +164,8 @@ const getUserInfo = async (event) => {
 // 记录用户行为日志
 const logUserAction = async (event) => {
   try {
-    const wxContext = cloud.getWXContext();
     console.log('=== 记录用户行为 ===');
+    const wxContext = cloud.getWXContext();
     console.log('行为类型:', event.action);
     console.log('OpenID:', wxContext.OPENID);
     
@@ -220,35 +220,55 @@ const getUserStats = async () => {
     const wxContext = cloud.getWXContext();
     
     // 获取用户基本信息
-    const userInfo = await db.collection('users').doc(wxContext.OPENID).get();
+    let userInfo = null;
+    try {
+      userInfo = await db.collection('users').doc(wxContext.OPENID).get();
+    } catch (error) {
+      console.log('获取用户信息失败:', error);
+    }
     
     // 获取用户发起的接龙数量
-    const myDragonsCount = await db.collection('dragons')
-      .where({
-        creatorOpenId: wxContext.OPENID
-      })
-      .count();
+    let myDragonsCount = { total: 0 };
+    try {
+      myDragonsCount = await db.collection('dragons')
+        .where({
+          creatorOpenId: wxContext.OPENID
+        })
+        .count();
+    } catch (error) {
+      console.log('获取接龙数量失败:', error);
+    }
     
     // 获取用户参与的接龙数量
-    const myParticipationsCount = await db.collection('dragons')
-      .where({
-        'participants.openid': wxContext.OPENID
-      })
-      .count();
+    let myParticipationsCount = { total: 0 };
+    try {
+      myParticipationsCount = await db.collection('dragons')
+        .where({
+          'participants.openid': wxContext.OPENID
+        })
+        .count();
+    } catch (error) {
+      console.log('获取参与数量失败:', error);
+    }
     
     // 获取最近的行为日志
-    const recentLogs = await db.collection('user_logs')
-      .where({
-        openid: wxContext.OPENID
-      })
-      .orderBy('timestamp', 'desc')
-      .limit(10)
-      .get();
+    let recentLogs = { data: [] };
+    try {
+      recentLogs = await db.collection('user_logs')
+        .where({
+          openid: wxContext.OPENID
+        })
+        .orderBy('timestamp', 'desc')
+        .limit(10)
+        .get();
+    } catch (error) {
+      console.log('获取行为日志失败:', error);
+    }
     
     return {
       success: true,
       data: {
-        userInfo: userInfo.data,
+        userInfo: userInfo ? userInfo.data : null,
         myDragonsCount: myDragonsCount.total,
         myParticipationsCount: myParticipationsCount.total,
         recentActions: recentLogs.data,
@@ -260,7 +280,7 @@ const getUserStats = async () => {
     return {
       success: false,
       error: error.message,
-      openid: wxContext.OPENID
+      openid: cloud.getWXContext().OPENID
     };
   }
 };
