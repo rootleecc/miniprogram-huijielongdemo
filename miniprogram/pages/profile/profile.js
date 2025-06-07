@@ -6,7 +6,15 @@ Page({
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     myDragons: [],
     myParticipations: [],
-    loading: false
+    loading: false,
+    needUpdateProfile: true
+  },
+
+  // 编辑资料
+  editProfile() {
+    this.setData({
+      needUpdateProfile: true
+    });
   },
 
   onLoad() {
@@ -28,11 +36,9 @@ Page({
 
   // 微信一键登录
   getUserProfile() {
-    // 使用头像昵称填写能力
     wx.getUserProfile({
       desc: '用于完善会员资料',
       success: (res) => {
-        console.log('getUserProfile success:', res);
         this.setData({
           userInfo: res.userInfo,
           hasUserInfo: true
@@ -52,86 +58,12 @@ Page({
           icon: 'success'
         });
       },
-      fail: (err) => {
-        console.log('getUserProfile fail:', err);
-        // 如果getUserProfile失败，使用头像昵称填写组件
-        this.useAvatarNickname();
+      fail: () => {
+        wx.showToast({
+          title: '登录失败',
+          icon: 'none'
+        });
       }
-    });
-  },
-
-  // 使用头像昵称填写组件
-  useAvatarNickname() {
-    // 先获取OpenID
-    this.getOpenId().then(() => {
-      // 设置默认用户信息，等待用户手动选择头像和昵称
-      this.setData({
-        userInfo: {
-          avatarUrl: '../../images/icons/avatar.png',
-          nickName: '微信用户'
-        },
-        hasUserInfo: true,
-        needUpdateProfile: true
-      });
-      
-      const app = getApp();
-      app.globalData.userInfo = this.data.userInfo;
-      
-      this.loadUserData();
-      
-      wx.showToast({
-        title: '请完善个人信息',
-        icon: 'none'
-      });
-    });
-  },
-
-  // 选择头像
-  onChooseAvatar(e) {
-    const { avatarUrl } = e.detail;
-    const userInfo = { ...this.data.userInfo };
-    userInfo.avatarUrl = avatarUrl;
-    
-    this.setData({
-      userInfo: userInfo
-    });
-    
-    // 更新全局数据
-    const app = getApp();
-    app.globalData.userInfo = userInfo;
-    
-    wx.showToast({
-      title: '头像更新成功',
-      icon: 'success'
-    });
-  },
-
-  // 昵称输入完成
-  onNicknameConfirm(e) {
-    const { value } = e.detail;
-    if (!value.trim()) {
-      wx.showToast({
-        title: '请输入昵称',
-        icon: 'none'
-      });
-      return;
-    }
-    
-    const userInfo = { ...this.data.userInfo };
-    userInfo.nickName = value.trim();
-    
-    this.setData({
-      userInfo: userInfo,
-      needUpdateProfile: false
-    });
-    
-    // 更新全局数据
-    const app = getApp();
-    app.globalData.userInfo = userInfo;
-    
-    wx.showToast({
-      title: '昵称更新成功',
-      icon: 'success'
     });
   },
 
