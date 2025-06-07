@@ -62,16 +62,29 @@ Page({
     this.setData({ loading: true });
     
     try {
-      const db = wx.cloud.database();
-      const { data } = await db.collection('dragons')
-        .orderBy('createTime', 'desc')
-        .limit(20)
-        .get();
-      
-      this.setData({ 
-        dragonList: data,
-        loading: false 
-      });
+      try {
+        const db = wx.cloud.database();
+        const { data } = await db.collection('dragons')
+          .orderBy('createTime', 'desc')
+          .limit(20)
+          .get();
+        
+        this.setData({ 
+          dragonList: data,
+          loading: false 
+        });
+      } catch (dbError) {
+        // 如果是集合不存在的错误，显示空列表
+        if (dbError.errCode === -502005) {
+          console.log('数据库集合不存在，将在首次创建接龙时自动创建');
+          this.setData({ 
+            dragonList: [],
+            loading: false 
+          });
+        } else {
+          throw dbError;
+        }
+      }
     } catch (error) {
       console.error('加载接龙列表失败:', error);
       this.setData({ loading: false });

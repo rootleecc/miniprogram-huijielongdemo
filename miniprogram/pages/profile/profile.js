@@ -108,32 +108,50 @@ Page({
 
       const db = wx.cloud.database();
       
-      // 获取我发起的接龙
-      const myDragonsRes = await db.collection('dragons')
-        .where({
-          creatorOpenId: app.globalData.openid
-        })
-        .orderBy('createTime', 'desc')
-        .limit(10)
-        .get();
+      try {
+        // 获取我发起的接龙
+        const myDragonsRes = await db.collection('dragons')
+          .where({
+            creatorOpenId: app.globalData.openid
+          })
+          .orderBy('createTime', 'desc')
+          .limit(10)
+          .get();
 
-      // 获取我参与的接龙
-      const myParticipationsRes = await db.collection('dragons')
-        .where({
-          'participants.openid': app.globalData.openid
-        })
-        .orderBy('updateTime', 'desc')
-        .limit(10)
-        .get();
+        // 获取我参与的接龙
+        const myParticipationsRes = await db.collection('dragons')
+          .where({
+            'participants.openid': app.globalData.openid
+          })
+          .orderBy('updateTime', 'desc')
+          .limit(10)
+          .get();
 
-      this.setData({
-        myDragons: myDragonsRes.data,
-        myParticipations: myParticipationsRes.data,
-        loading: false
-      });
+        this.setData({
+          myDragons: myDragonsRes.data,
+          myParticipations: myParticipationsRes.data,
+          loading: false
+        });
+      } catch (dbError) {
+        // 如果是集合不存在的错误，初始化为空数组
+        if (dbError.errCode === -502005) {
+          console.log('数据库集合不存在，将在首次创建接龙时自动创建');
+          this.setData({
+            myDragons: [],
+            myParticipations: [],
+            loading: false
+          });
+        } else {
+          throw dbError;
+        }
+      }
     } catch (error) {
       console.error('加载用户数据失败:', error);
       this.setData({ loading: false });
+      wx.showToast({
+        title: '加载失败',
+        icon: 'none'
+      });
     }
   },
 

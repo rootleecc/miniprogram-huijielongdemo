@@ -20,24 +20,38 @@ Page({
   // 加载接龙详情
   async loadDragonDetail() {
     try {
-      const db = wx.cloud.database();
-      const { data } = await db.collection('dragons').doc(this.data.dragonId).get();
-      
-      if (data) {
-        // 初始化选中商品列表
-        const selectedItems = data.goods.map(goods => ({
-          goodsIndex: data.goods.indexOf(goods),
-          goodsName: goods.name,
-          price: parseFloat(goods.price),
-          unit: goods.unit,
-          quantity: 0,
-          subtotal: '0.00'
-        }));
+      try {
+        const db = wx.cloud.database();
+        const { data } = await db.collection('dragons').doc(this.data.dragonId).get();
+        
+        if (data) {
+          // 初始化选中商品列表
+          const selectedItems = data.goods.map(goods => ({
+            goodsIndex: data.goods.indexOf(goods),
+            goodsName: goods.name,
+            price: parseFloat(goods.price),
+            unit: goods.unit,
+            quantity: 0,
+            subtotal: '0.00'
+          }));
 
-        this.setData({
-          dragon: data,
-          selectedItems: selectedItems
-        });
+          this.setData({
+            dragon: data,
+            selectedItems: selectedItems
+          });
+        }
+      } catch (dbError) {
+        if (dbError.errCode === -502005) {
+          wx.showToast({
+            title: '接龙不存在',
+            icon: 'none'
+          });
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
+        } else {
+          throw dbError;
+        }
       }
     } catch (error) {
       console.error('加载接龙详情失败:', error);

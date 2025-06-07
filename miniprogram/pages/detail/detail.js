@@ -26,29 +26,43 @@ Page({
     this.setData({ loading: true });
     
     try {
-      const db = wx.cloud.database();
-      const { data } = await db.collection('dragons').doc(this.data.dragonId).get();
-      
-      if (data) {
-        // 获取用户OpenID
-        const app = getApp();
-        if (!app.globalData.openid) {
-          const openidRes = await wx.cloud.callFunction({
-            name: 'quickstartFunctions',
-            data: { type: 'getOpenId' }
-          });
-          app.globalData.openid = openidRes.result.openid;
-        }
-
-        // 检查用户是否已参与
-        const userParticipation = data.participants?.find(p => p.openid === app.globalData.openid);
+      try {
+        const db = wx.cloud.database();
+        const { data } = await db.collection('dragons').doc(this.data.dragonId).get();
         
-        this.setData({
-          dragon: data,
-          isParticipated: !!userParticipation,
-          userParticipation: userParticipation,
-          loading: false
-        });
+        if (data) {
+          // 获取用户OpenID
+          const app = getApp();
+          if (!app.globalData.openid) {
+            const openidRes = await wx.cloud.callFunction({
+              name: 'quickstartFunctions',
+              data: { type: 'getOpenId' }
+            });
+            app.globalData.openid = openidRes.result.openid;
+          }
+
+          // 检查用户是否已参与
+          const userParticipation = data.participants?.find(p => p.openid === app.globalData.openid);
+          
+          this.setData({
+            dragon: data,
+            isParticipated: !!userParticipation,
+            userParticipation: userParticipation,
+            loading: false
+          });
+        }
+      } catch (dbError) {
+        if (dbError.errCode === -502005) {
+          wx.showToast({
+            title: '接龙不存在',
+            icon: 'none'
+          });
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
+        } else {
+          throw dbError;
+        }
       }
     } catch (error) {
       console.error('加载接龙详情失败:', error);
