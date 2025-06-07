@@ -17,9 +17,9 @@
     <!-- 用户信息卡片 -->
     <view class="user-card">
       <view class="user-info">
-        <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <image class="user-avatar" src="{{userInfo.avatarUrl || '../../images/icons/avatar.png'}}" mode="aspectFill"></image>
         <view class="user-details">
-          <text class="user-name">{{userInfo.nickName}}</text>
+          <text class="user-name">{{userInfo.nickName || '微信用户'}}</text>
           <text class="user-desc">接龙购物用户</text>
         </view>
       </view>

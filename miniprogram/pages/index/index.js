@@ -25,20 +25,6 @@ Page({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       });
-    } else {
-      // 引导用户到我的页面进行登录
-      wx.showModal({
-        title: '需要登录',
-        content: '请先到"我的"页面进行登录',
-        confirmText: '去登录',
-        success: (res) => {
-          if (res.confirm) {
-            wx.switchTab({
-              url: '/pages/profile/profile'
-            });
-          }
-        }
-      });
     }
   },
 

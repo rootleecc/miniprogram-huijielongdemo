@@ -19,6 +19,8 @@ Page({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       });
+      // 如果已有用户信息，加载用户数据
+      this.loadUserData();
     }
   },
 
