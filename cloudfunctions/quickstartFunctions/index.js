@@ -33,10 +33,190 @@ const getMiniProgramCode = async () => {
 // 创建集合
 const createCollection = async () => {
   try {
+    // 创建 dragons 集合
+    await db.createCollection("dragons");
+    
+    // 添加示例接龙数据
+    await db.collection("dragons").add({
+      data: {
+        title: "新鲜水果团购",
+        description: "优质进口水果，产地直供，新鲜美味！",
+        deadline: "2025-01-15",
+        contactInfo: "微信：fruit123",
+        goods: [
+          {
+            name: "进口苹果",
+            price: "15.8",
+            unit: "斤",
+            description: "新西兰进口，脆甜多汁",
+            images: []
+          },
+          {
+            name: "泰国榴莲",
+            price: "68.0",
+            unit: "个",
+            description: "金枕头榴莲，肉厚香甜",
+            images: []
+          }
+        ],
+        creatorOpenId: "demo_openid_001",
+        creatorName: "水果小店",
+        creatorAvatar: "",
+        status: "active",
+        participantCount: 3,
+        participants: [
+          {
+            openid: "demo_participant_001",
+            name: "张三",
+            avatar: "",
+            contactInfo: "微信：zhangsan123",
+            remark: "要甜一点的苹果",
+            items: [
+              {
+                goodsIndex: 0,
+                goodsName: "进口苹果",
+                price: 15.8,
+                unit: "斤",
+                quantity: 2,
+                subtotal: "31.60"
+              }
+            ],
+            totalAmount: 31.60,
+            participateTime: "2025-01-08 10:30:00"
+          },
+          {
+            openid: "demo_participant_002",
+            name: "李四",
+            avatar: "",
+            contactInfo: "手机：13800138000",
+            remark: "",
+            items: [
+              {
+                goodsIndex: 1,
+                goodsName: "泰国榴莲",
+                price: 68.0,
+                unit: "个",
+                quantity: 1,
+                subtotal: "68.00"
+              }
+            ],
+            totalAmount: 68.00,
+            participateTime: "2025-01-08 14:20:00"
+          },
+          {
+            openid: "demo_participant_003",
+            name: "王五",
+            avatar: "",
+            contactInfo: "微信：wangwu456",
+            remark: "苹果和榴莲都要",
+            items: [
+              {
+                goodsIndex: 0,
+                goodsName: "进口苹果",
+                price: 15.8,
+                unit: "斤",
+                quantity: 1,
+                subtotal: "15.80"
+              },
+              {
+                goodsIndex: 1,
+                goodsName: "泰国榴莲",
+                price: 68.0,
+                unit: "个",
+                quantity: 1,
+                subtotal: "68.00"
+              }
+            ],
+            totalAmount: 83.80,
+            participateTime: "2025-01-08 16:45:00"
+          }
+        ],
+        createTime: "2025-01-08 09:00:00",
+        updateTime: "2025-01-08 16:45:00"
+      },
+    });
+    
+    // 添加第二个示例接龙
+    await db.collection("dragons").add({
+      data: {
+        title: "办公用品团购",
+        description: "办公室必备用品，批量采购更优惠！",
+        deadline: "2025-01-20",
+        contactInfo: "QQ：888888",
+        goods: [
+          {
+            name: "A4复印纸",
+            price: "25.0",
+            unit: "包",
+            description: "70g白色复印纸，500张/包",
+            images: []
+          },
+          {
+            name: "中性笔",
+            price: "2.5",
+            unit: "支",
+            description: "0.5mm黑色中性笔",
+            images: []
+          }
+        ],
+        creatorOpenId: "demo_openid_002",
+        creatorName: "办公小助手",
+        creatorAvatar: "",
+        status: "active",
+        participantCount: 1,
+        participants: [
+          {
+            openid: "demo_participant_004",
+            name: "赵六",
+            avatar: "",
+            contactInfo: "微信：zhaoliu789",
+            remark: "需要蓝色中性笔",
+            items: [
+              {
+                goodsIndex: 0,
+                goodsName: "A4复印纸",
+                price: 25.0,
+                unit: "包",
+                quantity: 2,
+                subtotal: "50.00"
+              },
+              {
+                goodsIndex: 1,
+                goodsName: "中性笔",
+                price: 2.5,
+                unit: "支",
+                quantity: 10,
+                subtotal: "25.00"
+              }
+            ],
+            totalAmount: 75.00,
+            participateTime: "2025-01-08 11:15:00"
+          }
+        ],
+        createTime: "2025-01-08 10:00:00",
+        updateTime: "2025-01-08 11:15:00"
+      },
+    });
+    
+    return {
+      success: true,
+      message: "dragons集合创建成功，已添加示例数据"
+    };
+  } catch (e) {
+    // 如果集合已经存在，返回成功
+    return {
+      success: true,
+      message: "dragons集合已存在或创建成功"
+    };
+  }
+};
+
+// 创建销售数据集合（保留原有功能）
+const createSalesCollection = async () => {
+  try {
     // 创建集合
     await db.createCollection("sales");
     await db.collection("sales").add({
-      // data 字段表示需新增的 JSON 数据
       data: {
         region: "华东",
         city: "上海",
@@ -44,26 +224,9 @@ const createCollection = async () => {
       },
     });
     await db.collection("sales").add({
-      // data 字段表示需新增的 JSON 数据
-      data: {
-        region: "华东",
-        city: "南京",
-        sales: 11,
-      },
-    });
-    await db.collection("sales").add({
-      // data 字段表示需新增的 JSON 数据
       data: {
         region: "华南",
         city: "广州",
-        sales: 22,
-      },
-    });
-    await db.collection("sales").add({
-      // data 字段表示需新增的 JSON 数据
-      data: {
-        region: "华南",
-        city: "深圳",
         sales: 22,
       },
     });
@@ -174,6 +337,8 @@ exports.main = async (event, context) => {
       return await getMiniProgramCode();
     case "createCollection":
       return await createCollection();
+    case "createSalesCollection":
+      return await createSalesCollection();
     case "selectRecord":
       return await selectRecord();
     case "updateRecord":
