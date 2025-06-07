@@ -77,6 +77,63 @@ page {
   color: white;
 }
 
+/* 头像选择 */
+.avatar-wrapper {
+  position: relative;
+  margin-bottom: 30rpx;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.avatar-wrapper::after {
+  border: none;
+}
+
+.avatar-tip {
+  font-size: 24rpx;
+  color: #9ca3af;
+  margin-top: 15rpx;
+}
+
+/* 昵称输入 */
+.nickname-wrapper {
+  margin-bottom: 40rpx;
+}
+
+.nickname-input {
+  width: 100%;
+  padding: 25rpx 30rpx;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 50rpx;
+  font-size: 30rpx;
+  text-align: center;
+  background: #f9fafb;
+  box-sizing: border-box;
+}
+
+.nickname-input:focus {
+  border-color: #0052D9;
+  background: white;
+}
+
+/* 备用登录按钮 */
+.old-login-btn {
+  background: transparent;
+  color: #6b7280;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 50rpx;
+  padding: 25rpx 40rpx;
+  font-size: 28rpx;
+  width: 100%;
+  margin-top: 20rpx;
+  box-sizing: border-box;
+}
+
+.old-login-text {
+  color: #6b7280;
+}
+
 /* 用户信息卡片 */
 .user-card {
   background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);

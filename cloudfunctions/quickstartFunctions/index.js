@@ -4,6 +4,7 @@ cloud.init({
 });
 
 const db = cloud.database();
+
 // 获取openid
 const getOpenId = async () => {
   // 获取基础信息
@@ -13,6 +14,71 @@ const getOpenId = async () => {
     appid: wxContext.APPID,
     unionid: wxContext.UNIONID,
   };
+};
+
+// 获取用户信息（通过云函数）
+const getUserInfo = async (event) => {
+  try {
+    const wxContext = cloud.getWXContext();
+    
+    // 如果传入了用户信息，保存到数据库
+    if (event.userInfo) {
+      const userInfo = {
+        openid: wxContext.OPENID,
+        nickName: event.userInfo.nickName,
+        avatarUrl: event.userInfo.avatarUrl,
+        gender: event.userInfo.gender || 0,
+        city: event.userInfo.city || '',
+        province: event.userInfo.province || '',
+        country: event.userInfo.country || '',
+        language: event.userInfo.language || 'zh_CN',
+        updateTime: new Date().toISOString()
+      };
+      
+      // 保存或更新用户信息到数据库
+      try {
+        await db.collection('users').doc(wxContext.OPENID).set({
+          data: userInfo
+        });
+      } catch (dbError) {
+        // 如果集合不存在，先创建
+        if (dbError.errCode === -502005) {
+          await db.createCollection('users');
+          await db.collection('users').doc(wxContext.OPENID).set({
+            data: userInfo
+          });
+        }
+      }
+      
+      return {
+        success: true,
+        userInfo: userInfo,
+        openid: wxContext.OPENID
+      };
+    } else {
+      // 从数据库获取用户信息
+      try {
+        const result = await db.collection('users').doc(wxContext.OPENID).get();
+        return {
+          success: true,
+          userInfo: result.data,
+          openid: wxContext.OPENID
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: '用户信息不存在',
+          openid: wxContext.OPENID
+        };
+      }
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message,
+      openid: wxContext.OPENID
+    };
+  }
 };
 
 // 获取小程序二维码
@@ -351,6 +417,8 @@ exports.main = async (event, context) => {
   switch (event.type) {
     case "getOpenId":
       return await getOpenId();
+    case "getUserInfo":
+      return await getUserInfo(event);
     case "getMiniProgramCode":
       return await getMiniProgramCode();
     case "createCollection":

@@ -4,6 +4,10 @@ Page({
     userInfo: null,
     hasUserInfo: false,
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
+    tempUserInfo: {
+      avatarUrl: '',
+      nickName: ''
+    },
     myDragons: [],
     myParticipations: [],
     loading: false,
@@ -25,6 +29,11 @@ Page({
       });
       // 如果已有用户信息，加载用户数据
       this.loadUserData();
+    } else {
+      // 尝试从云端恢复用户信息
+      this.getOpenId().then(() => {
+        this.getUserInfoFromCloud();
+      });
     }
   },
 
@@ -107,24 +116,79 @@ Page({
 
   // 选择头像回调
   onChooseAvatar(e) {
-    const { avatarUrl } = e.detail;
-    const userInfo = { ...this.data.userInfo, avatarUrl };
-    this.setData({ userInfo });
+    console.log('=== 选择头像 ===');
+    console.log('头像URL:', e.detail.avatarUrl);
     
-    // 更新全局数据
-    const app = getApp();
-    app.globalData.userInfo = userInfo;
+    const { avatarUrl } = e.detail;
+    this.setData({
+      'tempUserInfo.avatarUrl': avatarUrl,
+      'userInfo.avatarUrl': avatarUrl
+    });
   },
 
-  // 昵称确认回调
-  onNicknameConfirm(e) {
-    const nickName = e.detail.value;
-    const userInfo = { ...this.data.userInfo, nickName };
-    this.setData({ userInfo });
+  // 昵称输入回调
+  onNicknameBlur(e) {
+    console.log('=== 昵称输入 ===');
+    console.log('昵称:', e.detail.value);
     
-    // 更新全局数据
+    const nickName = e.detail.value.trim();
+    this.setData({
+      'tempUserInfo.nickName': nickName,
+      'userInfo.nickName': nickName
+    });
+  },
+
+  // 完成用户信息设置
+  completeProfile() {
+    const { tempUserInfo } = this.data;
+    
+    // 验证必填信息
+    if (!tempUserInfo.nickName || tempUserInfo.nickName.trim() === '') {
+      wx.showToast({
+        title: '请输入昵称',
+        icon: 'none'
+      });
+      return;
+    }
+
+    console.log('=== 完成用户信息设置 ===');
+    console.log('临时用户信息:', tempUserInfo);
+
+    // 构建完整用户信息
+    const userInfo = {
+      nickName: tempUserInfo.nickName.trim(),
+      avatarUrl: tempUserInfo.avatarUrl || '../../images/icons/avatar.png',
+      gender: 0,
+      city: '',
+      province: '',
+      country: '',
+      language: 'zh_CN'
+    };
+
+    console.log('完整用户信息:', userInfo);
+
+    // 保存用户信息
+    this.setData({
+      userInfo: userInfo,
+      hasUserInfo: true
+    });
+
+    // 保存到全局
     const app = getApp();
     app.globalData.userInfo = userInfo;
+    console.log('全局用户信息已保存:', app.globalData.userInfo);
+
+    // 获取OpenID，保存到云端，并加载用户数据
+    this.getOpenId().then(async () => {
+      // 保存用户信息到云端
+      await this.saveUserInfoToCloud(userInfo);
+      this.loadUserData();
+    });
+
+    wx.showToast({
+      title: '登录成功',
+      icon: 'success'
+    });
   },
 
   // 获取OpenID
@@ -147,6 +211,62 @@ Page({
     } catch (error) {
       console.error('获取OpenID失败:', error);
       console.log('错误详情:', JSON.stringify(error));
+    }
+  },
+
+  // 保存用户信息到云端
+  async saveUserInfoToCloud(userInfo) {
+    try {
+      console.log('=== 保存用户信息到云端 ===');
+      console.log('要保存的用户信息:', userInfo);
+      
+      const res = await wx.cloud.callFunction({
+        name: 'quickstartFunctions',
+        data: { 
+          type: 'getUserInfo',
+          userInfo: userInfo
+        }
+      });
+      
+      console.log('云端保存结果:', res);
+      return res.result;
+    } catch (error) {
+      console.error('保存用户信息失败:', error);
+      return { success: false, error: error.message };
+    }
+  },
+
+  // 从云端获取用户信息
+  async getUserInfoFromCloud() {
+    try {
+      console.log('=== 从云端获取用户信息 ===');
+      
+      const res = await wx.cloud.callFunction({
+        name: 'quickstartFunctions',
+        data: { type: 'getUserInfo' }
+      });
+      
+      console.log('云端用户信息:', res);
+      
+      if (res.result.success && res.result.userInfo) {
+        const userInfo = res.result.userInfo;
+        this.setData({
+          userInfo: userInfo,
+          hasUserInfo: true
+        });
+        
+        // 保存到全局
+        const app = getApp();
+        app.globalData.userInfo = userInfo;
+        console.log('从云端恢复用户信息成功:', userInfo);
+        
+        return userInfo;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('从云端获取用户信息失败:', error);
+      return null;
     }
   },
 

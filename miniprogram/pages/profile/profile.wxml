@@ -3,11 +3,35 @@
   <!-- 未登录状态 -->
   <view class="login-section" wx:if="{{!hasUserInfo}}">
     <view class="login-card">
-      <image class="login-avatar" src="../../images/icons/avatar.png" mode="aspectFill"></image>
+      <!-- 头像选择 -->
+      <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image class="login-avatar" src="{{userInfo.avatarUrl || '../../images/icons/avatar.png'}}" mode="aspectFill"></image>
+        <view class="avatar-tip">点击选择头像</view>
+      </button>
+      
+      <!-- 昵称输入 -->
+      <view class="nickname-wrapper">
+        <input 
+          class="nickname-input" 
+          type="nickname" 
+          placeholder="请输入昵称" 
+          value="{{userInfo.nickName || ''}}"
+          bind:blur="onNicknameBlur"
+          maxlength="20"
+        />
+      </view>
+      
       <text class="login-title">欢迎使用接龙购物</text>
       <text class="login-desc">登录后可查看我的接龙和参与记录</text>
-      <button class="login-btn" wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">
-        <text class="login-btn-text">微信一键登录</text>
+      
+      <!-- 登录按钮 -->
+      <button class="login-btn" bindtap="completeProfile">
+        <text class="login-btn-text">完成登录</text>
+      </button>
+      
+      <!-- 备用登录方式 -->
+      <button class="old-login-btn" wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">
+        <text class="old-login-text">使用旧版登录</text>
       </button>
     </view>
   </view>
