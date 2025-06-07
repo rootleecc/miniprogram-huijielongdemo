@@ -1,0 +1,16 @@
+<view class="goods-item" wx:for="{{goodsList}}" wx:key="id">
+  <input placeholder="商品标题" model:value="{{item.title}}"/>
+  
+  <view class="image-upload">
+    <block wx:for="{{item.images}}" wx:key="*this">
+      <image src="{{item}}" mode="aspectFill"/>
+    </block>
+    <button bindtap="uploadImage" data-index="{{index}}">+</button>
+  </view>
+
+  <view class="specs" wx:for="{{item.specs}}" wx:key="name">
+    <input placeholder="规格名称" model:value="{{item.name}}"/>
+    <input placeholder="价格" type="number" model:value="{{item.price}}"/>
+    <input placeholder="库存" type="number" model:value="{{item.stock}}"/>
+  </view>
+</view>
