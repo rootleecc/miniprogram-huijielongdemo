@@ -205,21 +205,27 @@ page {
 
 /* 接龙列表 */
 .dragon-list {
-  padding: 0 30rpx 20rpx;
+  padding: 20rpx 30rpx 30rpx;
 }
 
 .dragon-item {
-  padding: 30rpx 0;
-  border-bottom: 2rpx solid #f3f4f6;
+  background: #f8fafc;
+  border: 2rpx solid #e2e8f0;
+  border-radius: 16rpx;
+  padding: 30rpx 25rpx;
+  margin-bottom: 20rpx;
   transition: background-color 0.2s;
+  box-shadow: 0 2rpx 8rpx rgba(0, 82, 217, 0.05);
 }
 
 .dragon-item:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .dragon-item:active {
-  background-color: #f9fafb;
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: scale(0.98);
 }
 
 .dragon-header {
