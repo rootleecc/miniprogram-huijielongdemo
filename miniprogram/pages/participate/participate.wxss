@@ -1,0 +1,241 @@
+/* pages/participate/participate.wxss */
+page {
+  background-color: #f5f5f5;
+}
+
+.container {
+  padding-bottom: 120rpx;
+}
+
+/* 头部 */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40rpx 30rpx 30rpx;
+  color: white;
+  text-align: center;
+}
+
+.header .title {
+  font-size: 48rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.header .subtitle {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+/* 内容区域 */
+.content {
+  padding: 0 30rpx;
+}
+
+.section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 30rpx 0;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 25rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+/* 商品列表 */
+.goods-item {
+  border: 2rpx solid #f0f0f0;
+  border-radius: 15rpx;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  background: #fafafa;
+}
+
+.goods-info {
+  margin-bottom: 20rpx;
+}
+
+.goods-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.goods-price {
+  font-size: 28rpx;
+  color: #ff6b35;
+  font-weight: bold;
+}
+
+/* 数量控制 */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15rpx;
+}
+
+.quantity-btn {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: white;
+}
+
+.quantity-btn.decrease {
+  background: #ff6b35;
+}
+
+.quantity-btn.increase {
+  background: #52c41a;
+}
+
+.quantity-input {
+  width: 120rpx;
+  height: 60rpx;
+  text-align: center;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 10rpx;
+  margin: 0 20rpx;
+  font-size: 28rpx;
+}
+
+.item-total {
+  text-align: center;
+  font-size: 26rpx;
+  color: #ff6b35;
+  font-weight: bold;
+}
+
+/* 表单项 */
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.label {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 15rpx;
+  font-weight: 500;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 20rpx;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+.input:focus, .textarea:focus {
+  border-color: #667eea;
+  background: white;
+}
+
+.textarea {
+  height: 120rpx;
+  resize: none;
+}
+
+/* 订单汇总 */
+.order-summary {
+  background: #f8f9ff;
+  border-radius: 15rpx;
+  padding: 25rpx;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid #e8e8e8;
+}
+
+.summary-item:last-of-type {
+  border-bottom: none;
+  margin-bottom: 20rpx;
+}
+
+.item-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  flex: 1;
+}
+
+.item-detail {
+  font-size: 24rpx;
+  color: #666;
+  margin: 0 20rpx;
+}
+
+.item-amount {
+  font-size: 28rpx;
+  color: #ff6b35;
+  font-weight: bold;
+}
+
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15rpx;
+  border-top: 2rpx solid #667eea;
+}
+
+.total-label {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.total-amount {
+  font-size: 36rpx;
+  color: #ff6b35;
+  font-weight: bold;
+}
+
+/* 提交按钮 */
+.submit-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 20rpx 30rpx;
+  border-top: 1rpx solid #e8e8e8;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50rpx;
+  padding: 25rpx 0;
+  font-size: 32rpx;
+  font-weight: bold;
+  text-align: center;
+}
+
+.submit-btn.disabled {
+  background: #ccc;
+  opacity: 0.6;
+}

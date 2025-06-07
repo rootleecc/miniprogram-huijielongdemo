@@ -1,16 +1,94 @@
-<view class="goods-item" wx:for="{{goodsList}}" wx:key="id">
-  <input placeholder="商品标题" model:value="{{item.title}}"/>
-  
-  <view class="image-upload">
-    <block wx:for="{{item.images}}" wx:key="*this">
-      <image src="{{item}}" mode="aspectFill"/>
-    </block>
-    <button bindtap="uploadImage" data-index="{{index}}">+</button>
+<!--pages/create/create.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">发起接龙</text>
+    <text class="subtitle">创建团购活动</text>
   </view>
 
-  <view class="specs" wx:for="{{item.specs}}" wx:key="name">
-    <input placeholder="规格名称" model:value="{{item.name}}"/>
-    <input placeholder="价格" type="number" model:value="{{item.price}}"/>
-    <input placeholder="库存" type="number" model:value="{{item.stock}}"/>
-  </view>
+  <form class="form">
+    <!-- 基本信息 -->
+    <view class="section">
+      <view class="section-title">基本信息</view>
+      
+      <view class="form-item">
+        <text class="label">接龙标题 *</text>
+        <input class="input" placeholder="请输入接龙标题" value="{{title}}" bindinput="onTitleInput" maxlength="50"/>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">接龙描述 *</text>
+        <textarea class="textarea" placeholder="请详细描述接龙内容、规则等" value="{{description}}" bindinput="onDescriptionInput" maxlength="500"></textarea>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">截止时间</text>
+        <picker mode="multiSelector" range="{{[[2024,2025,2026],[1,2,3,4,5,6,7,8,9,10,11,12],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],[0,5,10,15,20,25,30,35,40,45,50,55]]}" bindchange="onDeadlineChange">
+          <view class="picker">{{deadline || '请选择截止时间'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">联系方式 *</text>
+        <input class="input" placeholder="微信号、手机号等" value="{{contactInfo}}" bindinput="onContactInput" maxlength="50"/>
+      </view>
+    </view>
+
+    <!-- 商品信息 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">商品信息</text>
+        <button class="add-btn" bindtap="addGoods">+ 添加商品</button>
+      </view>
+      
+      <view class="goods-list">
+        <view class="goods-item" wx:for="{{goods}}" wx:key="index">
+          <view class="goods-header">
+            <text class="goods-title">商品 {{index + 1}}</text>
+            <button class="remove-btn" wx:if="{{goods.length > 1}}" bindtap="removeGoods" data-index="{{index}}">删除</button>
+          </view>
+          
+          <view class="form-item">
+            <text class="label">商品名称 *</text>
+            <input class="input" placeholder="请输入商品名称" value="{{item.name}}" bindinput="onGoodsNameInput" data-index="{{index}}" maxlength="30"/>
+          </view>
+          
+          <view class="form-row">
+            <view class="form-item half">
+              <text class="label">价格 *</text>
+              <input class="input" placeholder="0.00" value="{{item.price}}" bindinput="onGoodsPriceInput" data-index="{{index}}" type="digit"/>
+            </view>
+            <view class="form-item half">
+              <text class="label">单位</text>
+              <input class="input" placeholder="件" value="{{item.unit}}" bindinput="onGoodsUnitInput" data-index="{{index}}" maxlength="10"/>
+            </view>
+          </view>
+          
+          <view class="form-item">
+            <text class="label">商品描述</text>
+            <textarea class="textarea small" placeholder="商品规格、特色等" value="{{item.description}}" bindinput="onGoodsDescInput" data-index="{{index}}" maxlength="200"></textarea>
+          </view>
+          
+          <view class="form-item">
+            <text class="label">商品图片</text>
+            <view class="image-upload">
+              <view class="image-item" wx:for="{{item.images}}" wx:key="*this" wx:for-item="imageUrl" wx:for-index="imageIndex">
+                <image class="preview-image" src="{{imageUrl}}" mode="aspectFill"></image>
+                <view class="remove-image" bindtap="removeImage" data-goods-index="{{index}}" data-image-index="{{imageIndex}}">×</view>
+              </view>
+              <view class="upload-btn" bindtap="uploadImage" data-index="{{index}}" wx:if="{{item.images.length < 3}}">
+                <text class="upload-text">+</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-section">
+      <button class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitForm" disabled="{{submitting}}">
+        {{submitting ? '发布中...' : '发布接龙'}}
+      </button>
+    </view>
+  </form>
 </view>

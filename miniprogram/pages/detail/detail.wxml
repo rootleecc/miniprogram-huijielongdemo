@@ -1,2 +1,115 @@
 <!--pages/detail/detail.wxml-->
-<text>pages/detail/detail.wxml</text>
+<view class="container">
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="content" wx:else>
+    <!-- 头部信息 -->
+    <view class="header">
+      <view class="title">{{dragon.title}}</view>
+      <view class="status {{dragon.status === 'active' ? 'active' : 'ended'}}">
+        {{dragon.status === 'active' ? '进行中' : '已结束'}}
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="section">
+      <view class="section-title">接龙信息</view>
+      <view class="info-item">
+        <text class="info-label">描述：</text>
+        <text class="info-value">{{dragon.description}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">发起人：</text>
+        <text class="info-value">{{dragon.creatorName}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">截止时间：</text>
+        <text class="info-value">{{dragon.deadline}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">参与人数：</text>
+        <text class="info-value">{{dragon.participantCount || 0}}人</text>
+      </view>
+    </view>
+
+    <!-- 商品列表 -->
+    <view class="section">
+      <view class="section-title">商品列表</view>
+      <view class="goods-list">
+        <view class="goods-item" wx:for="{{dragon.goods}}" wx:key="index">
+          <view class="goods-info">
+            <view class="goods-name">{{item.name}}</view>
+            <view class="goods-price">¥{{item.price}}/{{item.unit}}</view>
+            <view class="goods-desc" wx:if="{{item.description}}">{{item.description}}</view>
+          </view>
+          
+          <view class="goods-images" wx:if="{{item.images && item.images.length > 0}}">
+            <image 
+              class="goods-image" 
+              wx:for="{{item.images}}" 
+              wx:key="*this" 
+              wx:for-item="imageUrl"
+              src="{{imageUrl}}" 
+              mode="aspectFill"
+              bindtap="previewImage"
+              data-current="{{imageUrl}}"
+              data-urls="{{item.images}}"
+            ></image>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 参与列表 -->
+    <view class="section" wx:if="{{dragon.participants && dragon.participants.length > 0}}">
+      <view class="section-title">参与列表</view>
+      <view class="participant-list">
+        <view class="participant-item" wx:for="{{dragon.participants}}" wx:key="openid">
+          <view class="participant-info">
+            <image class="participant-avatar" src="{{item.avatar || '../../images/icons/avatar.png'}}" mode="aspectFill"></image>
+            <view class="participant-details">
+              <view class="participant-name">{{item.name}}</view>
+              <view class="participant-items">
+                <text wx:for="{{item.items}}" wx:key="index" wx:for-item="orderItem">
+                  {{orderItem.goodsName}} x{{orderItem.quantity}}
+                </text>
+              </view>
+              <view class="participant-amount">总计：¥{{item.totalAmount}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的参与信息 -->
+    <view class="section" wx:if="{{isParticipated}}">
+      <view class="section-title">我的参与信息</view>
+      <view class="my-participation" bindtap="viewMyParticipation">
+        <view class="my-items">
+          <text wx:for="{{userParticipation.items}}" wx:key="index">
+            {{item.goodsName}} x{{item.quantity}}
+          </text>
+        </view>
+        <view class="my-amount">总计：¥{{userParticipation.totalAmount}}</view>
+        <view class="view-detail">点击查看详情</view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions">
+      <button class="action-btn secondary" bindtap="contactCreator">联系发起人</button>
+      <button class="action-btn primary" wx:if="{{!isParticipated && dragon.status === 'active'}}" bindtap="participate">
+        参与接龙
+      </button>
+      <button class="action-btn disabled" wx:elif="{{dragon.status !== 'active'}}">
+        接龙已结束
+      </button>
+      <button class="action-btn success" wx:else>
+        已参与
+      </button>
+      <button class="action-btn share" open-type="share">分享接龙</button>
+    </view>
+  </view>
+</view>
