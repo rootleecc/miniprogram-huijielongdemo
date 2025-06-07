@@ -20,6 +20,9 @@ const getOpenId = async () => {
 const getUserInfo = async (event) => {
   try {
     const wxContext = cloud.getWXContext();
+    console.log('=== getUserInfo云函数开始 ===');
+    console.log('OpenID:', wxContext.OPENID);
+    console.log('传入的用户信息:', event.userInfo);
     
     // 如果传入了用户信息，保存到数据库
     if (event.userInfo) {
@@ -37,6 +40,8 @@ const getUserInfo = async (event) => {
         loginCount: 1
       };
       
+      console.log('准备保存的用户信息:', userInfo);
+      
       // 保存或更新用户信息到数据库
       try {
         // 先检查用户是否已存在
@@ -44,14 +49,18 @@ const getUserInfo = async (event) => {
         let isNewUser = false;
         
         try {
+          console.log('检查用户是否已存在...');
           existingUser = await db.collection('users').doc(wxContext.OPENID).get();
+          console.log('现有用户信息:', existingUser.data);
         } catch (getUserError) {
           // 用户不存在或集合不存在
+          console.log('用户不存在或集合不存在:', getUserError.errCode);
           isNewUser = true;
         }
         
         if (existingUser && existingUser.data) {
           // 用户已存在，更新信息并增加登录次数
+          console.log('更新现有用户信息...');
           await db.collection('users').doc(wxContext.OPENID).update({
             data: {
               ...userInfo,
@@ -60,9 +69,11 @@ const getUserInfo = async (event) => {
               updateTime: new Date().toISOString()
             }
           });
+          console.log('用户信息更新成功');
         } else {
           isNewUser = true;
           // 新用户，创建记录
+          console.log('创建新用户记录...');
           await db.collection('users').doc(wxContext.OPENID).set({
             data: {
               ...userInfo,
@@ -70,12 +81,16 @@ const getUserInfo = async (event) => {
               firstLoginTime: new Date().toISOString()
             }
           });
+          console.log('新用户创建成功');
         }
       } catch (dbError) {
         // 如果集合不存在，先创建
+        console.log('数据库操作错误:', dbError.errCode, dbError.message);
         if (dbError.errCode === -502005) {
           isNewUser = true;
+          console.log('集合不存在，创建users集合...');
           await db.createCollection('users');
+          console.log('users集合创建成功，重新保存用户信息...');
           await db.collection('users').doc(wxContext.OPENID).set({
             data: {
               ...userInfo,
@@ -83,9 +98,14 @@ const getUserInfo = async (event) => {
               firstLoginTime: new Date().toISOString()
             }
           });
+          console.log('用户信息保存成功');
+        } else {
+          console.error('数据库操作失败:', dbError);
+          throw dbError;
         }
       }
       
+      console.log('=== 用户信息保存完成 ===');
       return {
         success: true,
         userInfo: userInfo,
@@ -94,11 +114,13 @@ const getUserInfo = async (event) => {
       };
     } else {
       // 从数据库获取用户信息
+      console.log('从数据库获取用户信息...');
       try {
         const result = await db.collection('users').doc(wxContext.OPENID).get();
         
         // 更新最后访问时间
         if (result.data) {
+          console.log('更新最后访问时间...');
           await db.collection('users').doc(wxContext.OPENID).update({
             data: {
               lastAccessTime: new Date().toISOString()
@@ -106,6 +128,7 @@ const getUserInfo = async (event) => {
           });
         }
         
+        console.log('用户信息获取成功:', result.data);
         return {
           success: true,
           userInfo: result.data,
@@ -113,6 +136,7 @@ const getUserInfo = async (event) => {
         };
       } catch (error) {
         // 如果是集合不存在的错误
+        console.log('获取用户信息失败:', error.errCode, error.message);
         if (error.errCode === -502005) {
           return {
             success: false,
@@ -141,6 +165,9 @@ const getUserInfo = async (event) => {
 const logUserAction = async (event) => {
   try {
     const wxContext = cloud.getWXContext();
+    console.log('=== 记录用户行为 ===');
+    console.log('行为类型:', event.action);
+    console.log('OpenID:', wxContext.OPENID);
     
     const logData = {
       openid: wxContext.OPENID,
@@ -151,17 +178,26 @@ const logUserAction = async (event) => {
       page: event.page || ''
     };
     
+    console.log('日志数据:', logData);
+    
     try {
       await db.collection('user_logs').add({
         data: logData
       });
+      console.log('用户行为记录成功');
     } catch (dbError) {
       // 如果集合不存在，先创建
+      console.log('user_logs集合不存在，创建集合...');
       if (dbError.errCode === -502005) {
         await db.createCollection('user_logs');
+        console.log('user_logs集合创建成功，重新记录日志...');
         await db.collection('user_logs').add({
           data: logData
         });
+        console.log('用户行为记录成功');
+      } else {
+        console.error('记录用户行为失败:', dbError);
+        throw dbError;
       }
     }
     

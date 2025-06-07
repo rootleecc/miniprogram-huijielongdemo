@@ -233,11 +233,14 @@ Page({
       });
       
       console.log('云端保存结果:', res);
+      console.log('云函数返回的result:', res.result);
       
       // 确保返回值不为null
       if (res && res.result) {
+        console.log('保存成功，返回结果:', res.result);
         return res.result;
       } else {
+        console.error('云函数返回结果为空或null');
         return { success: false, isNewUser: false, error: '云函数返回结果为空' };
       }
     } catch (error) {
