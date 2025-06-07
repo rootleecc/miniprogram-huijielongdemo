@@ -1,6 +1,6 @@
 /* pages/index/index.wxss */
 page {
-  background-color: #f5f5f5;
+  background-color: #f5f7fa;
 }
 
 .container {
@@ -9,7 +9,7 @@ page {
 
 /* 头部区域 */
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
   padding: 40rpx 30rpx 30rpx;
   display: flex;
   justify-content: space-between;
@@ -51,7 +51,7 @@ page {
   margin: 20rpx;
   border-radius: 20rpx;
   padding: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 82, 217, 0.1);
 }
 
 .action-item {
@@ -70,7 +70,7 @@ page {
 
 .action-text {
   font-size: 28rpx;
-  color: #333;
+  color: #1f2937;
   font-weight: 500;
 }
 
@@ -89,18 +89,18 @@ page {
 .list-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #333;
+  color: #1f2937;
 }
 
 .list-count {
   font-size: 24rpx;
-  color: #999;
+  color: #9ca3af;
 }
 
 .loading, .empty {
   text-align: center;
   padding: 100rpx 0;
-  color: #999;
+  color: #9ca3af;
 }
 
 .empty-icon {
@@ -117,7 +117,7 @@ page {
 }
 
 .create-btn {
-  background: #667eea;
+  background: #0052D9;
   color: white;
   border-radius: 50rpx;
   padding: 20rpx 40rpx;
@@ -130,7 +130,7 @@ page {
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 20rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 82, 217, 0.1);
   transition: transform 0.2s;
 }
 
@@ -148,7 +148,7 @@ page {
 .dragon-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #333;
+  color: #1f2937;
   flex: 1;
 }
 
@@ -160,16 +160,16 @@ page {
 }
 
 .dragon-status.active {
-  background: #52c41a;
+  background: #10b981;
 }
 
 .dragon-status.ended {
-  background: #999;
+  background: #9ca3af;
 }
 
 .dragon-desc {
   font-size: 28rpx;
-  color: #666;
+  color: #6b7280;
   margin-bottom: 20rpx;
   line-height: 1.5;
 }
@@ -185,11 +185,11 @@ page {
 }
 
 .info-label {
-  color: #999;
+  color: #9ca3af;
 }
 
 .info-value {
-  color: #333;
+  color: #1f2937;
   font-weight: 500;
 }
 
@@ -199,5 +199,5 @@ page {
 
 .time-text {
   font-size: 22rpx;
-  color: #ccc;
+  color: #d1d5db;
 }

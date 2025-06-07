@@ -1,6 +1,6 @@
 /* pages/participate/participate.wxss */
 page {
-  background-color: #f5f5f5;
+  background-color: #f5f7fa;
 }
 
 .container {
@@ -9,7 +9,7 @@ page {
 
 /* 头部 */
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
   padding: 40rpx 30rpx 30rpx;
   color: white;
   text-align: center;
@@ -37,25 +37,25 @@ page {
   border-radius: 20rpx;
   padding: 30rpx;
   margin: 30rpx 0;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 82, 217, 0.1);
 }
 
 .section-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #333;
+  color: #1f2937;
   margin-bottom: 25rpx;
   padding-bottom: 15rpx;
-  border-bottom: 2rpx solid #f0f0f0;
+  border-bottom: 2rpx solid #e5e7eb;
 }
 
 /* 商品列表 */
 .goods-item {
-  border: 2rpx solid #f0f0f0;
+  border: 2rpx solid #e5e7eb;
   border-radius: 15rpx;
   padding: 25rpx;
   margin-bottom: 20rpx;
-  background: #fafafa;
+  background: #f9fafb;
 }
 
 .goods-info {
@@ -65,13 +65,13 @@ page {
 .goods-name {
   font-size: 30rpx;
   font-weight: bold;
-  color: #333;
+  color: #1f2937;
   margin-bottom: 8rpx;
 }
 
 .goods-price {
   font-size: 28rpx;
-  color: #ff6b35;
+  color: #0052D9;
   font-weight: bold;
 }
 
@@ -96,18 +96,18 @@ page {
 }
 
 .quantity-btn.decrease {
-  background: #ff6b35;
+  background: #ef4444;
 }
 
 .quantity-btn.increase {
-  background: #52c41a;
+  background: #10b981;
 }
 
 .quantity-input {
   width: 120rpx;
   height: 60rpx;
   text-align: center;
-  border: 2rpx solid #e8e8e8;
+  border: 2rpx solid #e5e7eb;
   border-radius: 10rpx;
   margin: 0 20rpx;
   font-size: 28rpx;
@@ -116,7 +116,7 @@ page {
 .item-total {
   text-align: center;
   font-size: 26rpx;
-  color: #ff6b35;
+  color: #0052D9;
   font-weight: bold;
 }
 
@@ -128,7 +128,7 @@ page {
 .label {
   display: block;
   font-size: 28rpx;
-  color: #333;
+  color: #1f2937;
   margin-bottom: 15rpx;
   font-weight: 500;
 }
@@ -136,15 +136,15 @@ page {
 .input, .textarea {
   width: 100%;
   padding: 20rpx;
-  border: 2rpx solid #e8e8e8;
+  border: 2rpx solid #e5e7eb;
   border-radius: 10rpx;
   font-size: 28rpx;
-  background: #fafafa;
+  background: #f9fafb;
   box-sizing: border-box;
 }
 
 .input:focus, .textarea:focus {
-  border-color: #667eea;
+  border-color: #0052D9;
   background: white;
 }
 
@@ -155,7 +155,7 @@ page {
 
 /* 订单汇总 */
 .order-summary {
-  background: #f8f9ff;
+  background: #eff6ff;
   border-radius: 15rpx;
   padding: 25rpx;
 }
@@ -166,7 +166,7 @@ page {
   align-items: center;
   margin-bottom: 15rpx;
   padding-bottom: 15rpx;
-  border-bottom: 1rpx solid #e8e8e8;
+  border-bottom: 1rpx solid #e5e7eb;
 }
 
 .summary-item:last-of-type {
@@ -176,20 +176,20 @@ page {
 
 .item-name {
   font-size: 28rpx;
-  color: #333;
+  color: #1f2937;
   font-weight: 500;
   flex: 1;
 }
 
 .item-detail {
   font-size: 24rpx;
-  color: #666;
+  color: #6b7280;
   margin: 0 20rpx;
 }
 
 .item-amount {
   font-size: 28rpx;
-  color: #ff6b35;
+  color: #0052D9;
   font-weight: bold;
 }
 
@@ -198,18 +198,18 @@ page {
   justify-content: space-between;
   align-items: center;
   padding-top: 15rpx;
-  border-top: 2rpx solid #667eea;
+  border-top: 2rpx solid #0052D9;
 }
 
 .total-label {
   font-size: 32rpx;
-  color: #333;
+  color: #1f2937;
   font-weight: bold;
 }
 
 .total-amount {
   font-size: 36rpx;
-  color: #ff6b35;
+  color: #0052D9;
   font-weight: bold;
 }
 
@@ -221,12 +221,12 @@ page {
   right: 0;
   background: white;
   padding: 20rpx 30rpx;
-  border-top: 1rpx solid #e8e8e8;
+  border-top: 1rpx solid #e5e7eb;
 }
 
 .submit-btn {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
   color: white;
   border-radius: 50rpx;
   padding: 25rpx 0;
@@ -236,6 +236,6 @@ page {
 }
 
 .submit-btn.disabled {
-  background: #ccc;
+  background: #d1d5db;
   opacity: 0.6;
 }

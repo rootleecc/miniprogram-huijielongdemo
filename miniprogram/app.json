@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/create/create",
     "pages/detail/detail",
-    "pages/participate/participate"
+    "pages/participate/participate",
+    "pages/profile/profile"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -17,7 +18,7 @@
   "lazyCodeLoading": "requiredComponents",
   "tabBar": {
     "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
+    "selectedColor": "#0052D9",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
@@ -32,6 +33,12 @@
         "iconPath": "images/icons/goods.png",
         "selectedIconPath": "images/icons/goods-active.png",
         "text": "发起接龙"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "images/icons/usercenter.png",
+        "selectedIconPath": "images/icons/usercenter-active.png",
+        "text": "我的"
       }
     ]
   }

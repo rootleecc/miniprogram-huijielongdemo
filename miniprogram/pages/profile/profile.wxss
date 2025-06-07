@@ -1,0 +1,320 @@
+/* pages/profile/profile.wxss */
+page {
+  background-color: #f5f7fa;
+}
+
+.container {
+  min-height: 100vh;
+  padding-bottom: 100rpx;
+}
+
+/* 登录区域 */
+.login-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 60rpx 40rpx;
+}
+
+.login-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 80rpx 60rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 40rpx rgba(0, 82, 217, 0.1);
+  width: 100%;
+  max-width: 600rpx;
+}
+
+.login-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  margin-bottom: 40rpx;
+  background: #f3f4f6;
+}
+
+.login-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 20rpx;
+}
+
+.login-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #6b7280;
+  margin-bottom: 60rpx;
+  line-height: 1.6;
+}
+
+.login-btn {
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
+  color: white;
+  border-radius: 50rpx;
+  padding: 28rpx 60rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 8rpx 24rpx rgba(0, 82, 217, 0.3);
+}
+
+.login-btn-text {
+  color: white;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
+  margin: 30rpx;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: 0 8rpx 40rpx rgba(0, 82, 217, 0.2);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.user-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50rpx;
+  margin-right: 30rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.user-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.user-desc {
+  font-size: 26rpx;
+  opacity: 0.8;
+}
+
+.logout-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  border-radius: 40rpx;
+  padding: 16rpx 32rpx;
+  font-size: 26rpx;
+}
+
+/* 数据统计 */
+.stats-section {
+  background: white;
+  margin: 30rpx;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.stats-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stats-number {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #0052D9;
+  margin-bottom: 8rpx;
+}
+
+.stats-label {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.stats-divider {
+  width: 2rpx;
+  height: 60rpx;
+  background: #e5e7eb;
+}
+
+/* 内容区域 */
+.profile-content {
+  padding-bottom: 40rpx;
+}
+
+.section {
+  margin: 30rpx;
+  background: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 30rpx 20rpx;
+  border-bottom: 2rpx solid #f3f4f6;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: #0052D9;
+}
+
+/* 加载和空状态 */
+.loading {
+  text-align: center;
+  padding: 80rpx 0;
+  color: #9ca3af;
+  font-size: 28rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.4;
+}
+
+.empty-text {
+  display: block;
+  font-size: 28rpx;
+  color: #9ca3af;
+  margin-bottom: 40rpx;
+}
+
+.empty-btn {
+  background: #0052D9;
+  color: white;
+  border-radius: 50rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+}
+
+/* 接龙列表 */
+.dragon-list {
+  padding: 0 30rpx 20rpx;
+}
+
+.dragon-item {
+  padding: 30rpx 0;
+  border-bottom: 2rpx solid #f3f4f6;
+  transition: background-color 0.2s;
+}
+
+.dragon-item:last-child {
+  border-bottom: none;
+}
+
+.dragon-item:active {
+  background-color: #f9fafb;
+}
+
+.dragon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.dragon-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #1f2937;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.dragon-status {
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  color: white;
+  font-weight: 500;
+}
+
+.dragon-status.active {
+  background: #10b981;
+}
+
+.dragon-status.ended {
+  background: #9ca3af;
+}
+
+.dragon-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dragon-participants,
+.dragon-creator {
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.dragon-time {
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+
+/* 功能菜单 */
+.menu-section {
+  margin: 30rpx;
+  background: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40rpx 30rpx;
+  border-bottom: 2rpx solid #f3f4f6;
+  transition: background-color 0.2s;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background-color: #f9fafb;
+}
+
+.menu-text {
+  font-size: 30rpx;
+  color: #1f2937;
+}
+
+.menu-arrow {
+  font-size: 28rpx;
+  color: #9ca3af;
+}
