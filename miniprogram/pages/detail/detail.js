@@ -158,6 +158,15 @@ Page({
   // 记录用户行为
   async logUserAction(action, details = {}) {
     try {
+      // 使用新的API获取系统信息
+      let platform = 'unknown';
+      try {
+        const systemInfo = wx.getDeviceInfo();
+        platform = systemInfo.platform || 'unknown';
+      } catch (error) {
+        console.log('获取设备信息失败，使用默认值');
+      }
+      
       await wx.cloud.callFunction({
         name: 'quickstartFunctions',
         data: {
@@ -165,7 +174,7 @@ Page({
           action: action,
           details: details,
           page: 'detail',
-          userAgent: wx.getSystemInfoSync().platform
+          userAgent: platform
         }
       });
     } catch (error) {
