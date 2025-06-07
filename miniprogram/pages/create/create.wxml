@@ -4,7 +4,7 @@
     <view class="header-background"></view>
     <view class="header-content">
       <view class="header-icon">
-        <image class="icon-image" src="../../images/icons/goods-active.png" mode="aspectFit"></image>
+        <view class="icon-placeholder">📦</view>
       </view>
       <view class="header-text">
         <text class="title">发起接龙</text>

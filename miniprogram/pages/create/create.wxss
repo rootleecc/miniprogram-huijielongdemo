@@ -53,10 +53,9 @@ page {
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
 }
 
-.icon-image {
-  width: 60rpx;
-  height: 60rpx;
-  filter: brightness(0) invert(1);
+.icon-placeholder {
+  font-size: 60rpx;
+  line-height: 1;
 }
 
 .header-text {
