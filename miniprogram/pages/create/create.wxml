@@ -22,7 +22,7 @@
       
       <view class="form-item">
         <text class="label">截止时间</text>
-        <picker mode="multiSelector" range="{{[[2024,2025,2026],[1,2,3,4,5,6,7,8,9,10,11,12],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],[0,5,10,15,20,25,30,35,40,45,50,55]]}" bindchange="onDeadlineChange">
+        <picker mode="date" value="{{deadline}}" bindchange="onDeadlineChange">
           <view class="picker">{{deadline || '请选择截止时间'}}</view>
         </picker>
       </view>
