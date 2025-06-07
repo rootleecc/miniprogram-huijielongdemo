@@ -40,9 +40,17 @@ const getUserInfo = async (event) => {
       // 保存或更新用户信息到数据库
       try {
         // 先检查用户是否已存在
-        const existingUser = await db.collection('users').doc(wxContext.OPENID).get();
+        let existingUser = null;
+        let isNewUser = false;
         
-        if (existingUser.data) {
+        try {
+          existingUser = await db.collection('users').doc(wxContext.OPENID).get();
+        } catch (getUserError) {
+          // 用户不存在或集合不存在
+          isNewUser = true;
+        }
+        
+        if (existingUser && existingUser.data) {
           // 用户已存在，更新信息并增加登录次数
           await db.collection('users').doc(wxContext.OPENID).update({
             data: {
@@ -53,6 +61,7 @@ const getUserInfo = async (event) => {
             }
           });
         } else {
+          isNewUser = true;
           // 新用户，创建记录
           await db.collection('users').doc(wxContext.OPENID).set({
             data: {
@@ -65,6 +74,7 @@ const getUserInfo = async (event) => {
       } catch (dbError) {
         // 如果集合不存在，先创建
         if (dbError.errCode === -502005) {
+          isNewUser = true;
           await db.createCollection('users');
           await db.collection('users').doc(wxContext.OPENID).set({
             data: {
@@ -80,7 +90,7 @@ const getUserInfo = async (event) => {
         success: true,
         userInfo: userInfo,
         openid: wxContext.OPENID,
-        isNewUser: !existingUser.data
+        isNewUser: isNewUser
       };
     } else {
       // 从数据库获取用户信息

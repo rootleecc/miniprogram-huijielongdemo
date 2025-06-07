@@ -176,7 +176,7 @@ Page({
       
       // 记录登录行为
       await this.logUserAction('login', {
-        isNewUser: saveResult.isNewUser,
+        isNewUser: saveResult && saveResult.isNewUser,
         loginMethod: 'manual_setup',
         hasAvatar: !!completeUserInfo.avatarUrl,
         hasNickname: !!completeUserInfo.nickName
@@ -229,10 +229,10 @@ Page({
       });
       
       console.log('云端保存结果:', res);
-      return res.result;
+      return res.result || { success: false, isNewUser: false };
     } catch (error) {
       console.error('保存用户信息失败:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.message, isNewUser: false };
     }
   },
 
