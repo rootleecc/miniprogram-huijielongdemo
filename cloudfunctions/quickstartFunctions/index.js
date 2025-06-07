@@ -158,186 +158,6 @@ const getUserInfo = async (event) => {
     }
   } catch (error) {
     console.error('getUserInfo云函数错误:', error);
-    // 确保即使出错也能返回openid
-    let openid = 'unknown';
-    try {
-      const wxContext = cloud.getWXContext();
-      openid = wxContext.OPENID || 'unknown';
-    } catch (contextError) {
-      console.error('获取wxContext失败:', contextError);
-    }
-    
-    return {
-      success: false,
-      error: error.message,
-      openid: openid
-    };
-  }
-};
-
-// 记录用户行为日志
-const logUserAction = async (event) => {
-  try {
-    console.log('=== 记录用户行为 ===');
-    const wxContext = cloud.getWXContext();
-    console.log('行为类型:', event.action);
-    console.log('OpenID:', wxContext.OPENID);
-    
-    const logData = {
-      openid: wxContext.OPENID,
-      action: event.action, // 'login', 'create_dragon', 'participate', 'view_detail' 等
-      details: event.details || {},
-      timestamp: new Date().toISOString(),
-      userAgent: event.userAgent || '',
-      page: event.page || ''
-    };
-    
-    console.log('日志数据:', logData);
-    
-    try {
-      await db.collection('user_logs').add({
-        data: logData
-      });
-      console.log('用户行为记录成功');
-    } catch (dbError) {
-      // 如果集合不存在，先创建
-      console.log('user_logs集合不存在，创建集合...');
-      if (dbError.errCode === -502005) {
-        await db.createCollection('user_logs');
-        console.log('user_logs集合创建成功，重新记录日志...');
-        await db.collection('user_logs').add({
-          data: logData
-        });
-        console.log('用户行为记录成功');
-      } else {
-        console.error('记录用户行为失败:', dbError);
-        throw dbError;
-      }
-    }
-    
-    return {
-      success: true,
-      message: '行为日志记录成功'
-    };
-  } catch (error) {
-    console.error('记录用户行为失败:', error);
-    return {
-      success: false,
-      error: error.message
-    };
-  }
-};
-
-// 获取用户统计信息
-const getUserStats = async () => {
-  try {
-    const wxContext = cloud.getWXContext();
-    
-    // 获取用户基本信息
-    let userInfo = null;
-    try {
-      userInfo = await db.collection('users').doc(wxContext.OPENID).get();
-    } catch (error) {
-      console.log('获取用户信息失败:', error);
-    }
-    
-    // 获取用户发起的接龙数量
-    let myDragonsCount = { total: 0 };
-    try {
-      myDragonsCount = await db.collection('dragons')
-        .where({
-          creatorOpenId: wxContext.OPENID
-        })
-        .count();
-    } catch (error) {
-      console.log('获取接龙数量失败:', error);
-    }
-    
-    // 获取用户参与的接龙数量
-    let myParticipationsCount = { total: 0 };
-    try {
-      myParticipationsCount = await db.collection('dragons')
-        .where({
-          'participants.openid': wxContext.OPENID
-        })
-        .count();
-    } catch (error) {
-      console.log('获取参与数量失败:', error);
-    }
-    
-    // 获取最近的行为日志
-    let recentLogs = { data: [] };
-    try {
-      recentLogs = await db.collection('user_logs')
-        .where({
-          openid: wxContext.OPENID
-        })
-        .orderBy('timestamp', 'desc')
-        .limit(10)
-        .get();
-    } catch (error) {
-      console.log('获取行为日志失败:', error);
-    }
-    
-    return {
-      success: true,
-      data: {
-        userInfo: userInfo ? userInfo.data : null,
-        myDragonsCount: myDragonsCount.total,
-        myParticipationsCount: myParticipationsCount.total,
-        recentActions: recentLogs.data,
-        openid: wxContext.OPENID
-      }
-    };
-  } catch (error) {
-    console.error('获取用户统计信息失败:', error);
-    // 确保即使出错也能返回openid
-    let openid = 'unknown';
-    try {
-      const wxContext = cloud.getWXContext();
-      openid = wxContext.OPENID || 'unknown';
-    } catch (contextError) {
-      console.error('获取wxContext失败:', contextError);
-    }
-    
-    return {
-      success: false,
-      error: error.message,
-      openid: openid
-    };
-  }
-};
-            data: {
-              lastAccessTime: new Date().toISOString()
-            }
-          });
-        }
-        
-        console.log('用户信息获取成功:', result.data);
-        return {
-          success: true,
-          userInfo: result.data,
-          openid: wxContext.OPENID
-        };
-      } catch (error) {
-        // 如果是集合不存在的错误
-        console.log('获取用户信息失败:', error.errCode, error.message);
-        if (error.errCode === -502005) {
-          return {
-            success: false,
-            message: '用户集合不存在',
-            openid: wxContext.OPENID
-          };
-        }
-        return {
-          success: false,
-          message: '用户信息不存在',
-          openid: wxContext.OPENID
-        };
-      }
-    }
-  } catch (error) {
-    console.error('getUserInfo云函数错误:', error);
     return {
       success: false,
       error: error.message,
@@ -469,6 +289,7 @@ const getUserStats = async () => {
     };
   }
 };
+
 // 获取小程序二维码
 const getMiniProgramCode = async () => {
   // 获取小程序二维码的buffer
@@ -587,7 +408,7 @@ const createCollection = async () => {
         ],
         createTime: "2025-01-08 09:00:00",
         updateTime: "2025-01-08 16:45:00"
-      },
+      }
     });
     
     // 添加第二个示例接龙
@@ -649,7 +470,7 @@ const createCollection = async () => {
         ],
         createTime: "2025-01-08 10:00:00",
         updateTime: "2025-01-08 11:15:00"
-      },
+      }
     });
     
     return {
@@ -748,6 +569,7 @@ const initializeDatabase = async () => {
     };
   }
 };
+
 // 创建销售数据集合（保留原有功能）
 const createSalesCollection = async () => {
   try {
@@ -758,14 +580,14 @@ const createSalesCollection = async () => {
         region: "华东",
         city: "上海",
         sales: 11,
-      },
+      }
     });
     await db.collection("sales").add({
       data: {
         region: "华南",
         city: "广州",
         sales: 22,
-      },
+      }
     });
     return {
       success: true,
@@ -857,14 +679,6 @@ const deleteRecord = async (event) => {
   }
 };
 
-// const getOpenId = require('./getOpenId/index');
-// const getMiniProgramCode = require('./getMiniProgramCode/index');
-// const createCollection = require('./createCollection/index');
-// const selectRecord = require('./selectRecord/index');
-// const updateRecord = require('./updateRecord/index');
-// const sumRecord = require('./sumRecord/index');
-// const fetchGoodsList = require('./fetchGoodsList/index');
-// const genMpQrcode = require('./genMpQrcode/index');
 // 云函数入口函数
 exports.main = async (event, context) => {
   switch (event.type) {
