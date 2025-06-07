@@ -14,6 +14,10 @@ Page({
   onLoad() {
     // 检查是否已有用户信息
     const app = getApp();
+    console.log('=== Profile页面加载 ===');
+    console.log('全局用户信息:', app.globalData.userInfo);
+    console.log('全局OpenID:', app.globalData.openid);
+    
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -25,6 +29,13 @@ Page({
   },
 
   onShow() {
+    console.log('=== Profile页面显示 ===');
+    const app = getApp();
+    console.log('当前用户信息:', this.data.userInfo);
+    console.log('当前登录状态:', this.data.hasUserInfo);
+    console.log('全局用户信息:', app.globalData.userInfo);
+    console.log('全局OpenID:', app.globalData.openid);
+    
     if (this.data.hasUserInfo) {
       this.loadUserData();
     }
@@ -55,6 +66,15 @@ Page({
     wx.getUserProfile({
       desc: '用于完善会员资料',
       success: (res) => {
+        console.log('=== 微信登录成功 ===');
+        console.log('用户信息:', res.userInfo);
+        console.log('头像URL:', res.userInfo.avatarUrl);
+        console.log('昵称:', res.userInfo.nickName);
+        console.log('性别:', res.userInfo.gender);
+        console.log('城市:', res.userInfo.city);
+        console.log('省份:', res.userInfo.province);
+        console.log('国家:', res.userInfo.country);
+        
         this.setData({
           userInfo: res.userInfo,
           hasUserInfo: true
@@ -63,6 +83,7 @@ Page({
         // 保存到全局
         const app = getApp();
         app.globalData.userInfo = res.userInfo;
+        console.log('全局用户信息已保存:', app.globalData.userInfo);
         
         // 获取OpenID
         this.getOpenId().then(() => {
@@ -75,6 +96,7 @@ Page({
         });
       },
       fail: () => {
+        console.log('=== 微信登录失败 ===');
         wx.showToast({
           title: '登录失败',
           icon: 'none'
@@ -108,15 +130,23 @@ Page({
   // 获取OpenID
   async getOpenId() {
     try {
+      console.log('=== 开始获取OpenID ===');
       const res = await wx.cloud.callFunction({
         name: 'quickstartFunctions',
         data: { type: 'getOpenId' }
       });
+      console.log('云函数返回结果:', res);
+      console.log('OpenID:', res.result.openid);
+      console.log('AppID:', res.result.appid);
+      console.log('UnionID:', res.result.unionid);
+      
       const app = getApp();
       app.globalData.openid = res.result.openid;
+      console.log('全局OpenID已保存:', app.globalData.openid);
       return res.result.openid;
     } catch (error) {
       console.error('获取OpenID失败:', error);
+      console.log('错误详情:', JSON.stringify(error));
     }
   },
 
