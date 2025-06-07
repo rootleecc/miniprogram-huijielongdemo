@@ -473,6 +473,78 @@ Page({
     });
   },
 
+  // 查看数据库数据（调试用）
+  async checkDatabaseData() {
+    wx.showLoading({ title: '查询中...' });
+    
+    try {
+      const app = getApp();
+      const db = wx.cloud.database();
+      
+      // 查询用户信息
+      let userInfo = null;
+      try {
+        const userResult = await db.collection('users').doc(app.globalData.openid).get();
+        userInfo = userResult.data;
+      } catch (error) {
+        console.log('用户信息查询失败:', error);
+      }
+      
+      // 查询用户行为日志
+      let userLogs = [];
+      try {
+        const logsResult = await db.collection('user_logs')
+          .where({ openid: app.globalData.openid })
+          .orderBy('timestamp', 'desc')
+          .limit(5)
+          .get();
+        userLogs = logsResult.data;
+      } catch (error) {
+        console.log('用户日志查询失败:', error);
+      }
+      
+      wx.hideLoading();
+      
+      // 显示查询结果
+      let message = '=== 数据库数据查询结果 ===\n\n';
+      
+      if (userInfo) {
+        message += `用户信息表 (users):\n`;
+        message += `- 昵称: ${userInfo.nickName}\n`;
+        message += `- 登录次数: ${userInfo.loginCount || 1}\n`;
+        message += `- 创建时间: ${userInfo.createTime}\n`;
+        message += `- 最后登录: ${userInfo.lastLoginTime}\n\n`;
+      } else {
+        message += `用户信息表 (users): 暂无数据\n\n`;
+      }
+      
+      if (userLogs.length > 0) {
+        message += `用户行为日志表 (user_logs):\n`;
+        userLogs.forEach((log, index) => {
+          message += `${index + 1}. ${log.action} - ${log.timestamp}\n`;
+        });
+      } else {
+        message += `用户行为日志表 (user_logs): 暂无数据\n`;
+      }
+      
+      message += `\n当前OpenID: ${app.globalData.openid}`;
+      
+      wx.showModal({
+        title: '数据库数据',
+        content: message,
+        showCancel: false
+      });
+      
+    } catch (error) {
+      wx.hideLoading();
+      console.error('查询数据库失败:', error);
+      wx.showToast({
+        title: '查询失败',
+        icon: 'none'
+      });
+    }
+  },
+
   // 导出数据
   async exportData() {
     // 记录导出行为
