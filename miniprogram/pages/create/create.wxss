@@ -5,60 +5,13 @@ page {
 
 .container {
   padding-bottom: 120rpx;
-}
-
-/* 头部区域 */
-.header {
-  position: relative;
-  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
-  padding: 0;
-  color: white;
-  overflow: hidden;
-}
-
-.header-content {
-  padding: 60rpx 40rpx 80rpx;
-  position: relative;
-  z-index: 2;
-  text-align: center;
-}
-
-.header-text {
-  width: 100%;
-}
-
-.title {
-  font-size: 48rpx;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 12rpx;
-  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
-}
-
-.subtitle {
-  font-size: 28rpx;
-  opacity: 0.9;
-  line-height: 1.4;
-  display: block;
-}
-
-.header-wave {
-  position: absolute;
-  bottom: -2rpx;
-  left: 0;
-  right: 0;
-  height: 60rpx;
-  background: #f5f7fa;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  z-index: 1;
+  padding-top: 20rpx;
 }
 
 /* 内容区域 */
 .content {
   padding: 0 30rpx;
-  margin-top: -30rpx;
   position: relative;
-  z-index: 3;
 }
 
 /* 表单 */
