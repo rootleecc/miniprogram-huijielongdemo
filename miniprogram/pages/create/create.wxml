@@ -1,8 +1,21 @@
 <!--pages/create/create.wxml-->
 <view class="container">
   <view class="header">
-    <text class="title">发起接龙</text>
-    <text class="subtitle">创建团购活动</text>
+    <view class="header-background"></view>
+    <view class="header-content">
+      <view class="header-icon">
+        <image class="icon-image" src="../../images/icons/goods-active.png" mode="aspectFit"></image>
+      </view>
+      <view class="header-text">
+        <text class="title">发起接龙</text>
+        <text class="subtitle">创建团购活动，邀请好友参与</text>
+      </view>
+    </view>
+    <view class="header-decoration">
+      <view class="decoration-circle circle-1"></view>
+      <view class="decoration-circle circle-2"></view>
+      <view class="decoration-circle circle-3"></view>
+    </view>
   </view>
 
   <form class="form">
