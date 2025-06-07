@@ -278,7 +278,8 @@ Page({
       
       console.log('云端用户信息:', res);
       
-      if (res.result.success && res.result.userInfo) {
+      // 检查返回结果是否有效
+      if (res.result && res.result.success && res.result.userInfo) {
         const userInfo = res.result.userInfo;
         this.setData({
           userInfo: userInfo,
@@ -291,9 +292,10 @@ Page({
         console.log('从云端恢复用户信息成功:', userInfo);
         
         return userInfo;
+      } else {
+        console.log('云端没有用户信息或获取失败:', res.result);
+        return null;
       }
-      
-      return null;
     } catch (error) {
       console.error('从云端获取用户信息失败:', error);
       return null;

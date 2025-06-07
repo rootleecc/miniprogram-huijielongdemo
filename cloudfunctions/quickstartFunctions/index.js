@@ -65,6 +65,14 @@ const getUserInfo = async (event) => {
           openid: wxContext.OPENID
         };
       } catch (error) {
+        // 如果是集合不存在的错误
+        if (error.errCode === -502005) {
+          return {
+            success: false,
+            message: '用户集合不存在',
+            openid: wxContext.OPENID
+          };
+        }
         return {
           success: false,
           message: '用户信息不存在',
@@ -73,6 +81,7 @@ const getUserInfo = async (event) => {
       }
     }
   } catch (error) {
+    console.error('getUserInfo云函数错误:', error);
     return {
       success: false,
       error: error.message,
