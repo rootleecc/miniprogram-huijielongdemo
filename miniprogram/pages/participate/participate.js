@@ -30,7 +30,8 @@ Page({
           goodsName: goods.name,
           price: parseFloat(goods.price),
           unit: goods.unit,
-          quantity: 0
+          quantity: 0,
+          subtotal: '0.00'
         }));
 
         this.setData({
@@ -59,6 +60,9 @@ Page({
       item.quantity -= 1;
     }
     
+    // 计算小计
+    item.subtotal = (item.price * item.quantity).toFixed(2);
+    
     this.setData({ selectedItems });
     this.calculateTotal();
   },
@@ -70,6 +74,9 @@ Page({
     const selectedItems = this.data.selectedItems;
     
     selectedItems[index].quantity = Math.max(0, value);
+    // 计算小计
+    selectedItems[index].subtotal = (selectedItems[index].price * selectedItems[index].quantity).toFixed(2);
+    
     this.setData({ selectedItems });
     this.calculateTotal();
   },
