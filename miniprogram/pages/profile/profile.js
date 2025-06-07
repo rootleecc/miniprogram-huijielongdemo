@@ -66,82 +66,27 @@ Page({
     }
   },
 
-  // 微信一键登录 - 自动获取头像和昵称
-  getUserProfile() {
-    wx.getUserProfile({
-      desc: '用于完善会员资料',
-      success: (res) => {
-        console.log('=== 微信登录成功 ===');
-        console.log('用户信息:', res.userInfo);
-        console.log('头像URL:', res.userInfo.avatarUrl);
-        console.log('昵称:', res.userInfo.nickName);
-        console.log('性别:', res.userInfo.gender);
-        console.log('城市:', res.userInfo.city);
-        console.log('省份:', res.userInfo.province);
-        console.log('国家:', res.userInfo.country);
-        
-        // 直接使用微信返回的用户信息
-        const userInfo = {
-          nickName: res.userInfo.nickName,
-          avatarUrl: res.userInfo.avatarUrl,
-          gender: res.userInfo.gender || 0,
-          city: res.userInfo.city || '',
-          province: res.userInfo.province || '',
-          country: res.userInfo.country || '',
-          language: res.userInfo.language || 'zh_CN'
-        };
-
-        this.setData({
-          userInfo: userInfo,
-          hasUserInfo: true
-        });
-        
-        // 保存到全局
-        const app = getApp();
-        app.globalData.userInfo = userInfo;
-        console.log('全局用户信息已保存:', app.globalData.userInfo);
-        
-        // 获取OpenID并保存到云端
-        this.getOpenId().then(async () => {
-          await this.saveUserInfoToCloud(userInfo);
-          this.loadUserData();
-        });
-        
-        wx.showToast({
-          title: '登录成功',
-          icon: 'success'
-        });
+  // 开始登录流程 - 自动显示设置界面
+  startLogin() {
+    console.log('=== 开始登录流程 ===');
+    
+    // 初始化用户信息对象
+    this.setData({
+      userInfo: {
+        nickName: '',
+        avatarUrl: '../../images/icons/avatar.png',
+        gender: 0,
+        city: '',
+        province: '',
+        country: '',
+        language: 'zh_CN'
       },
-      fail: () => {
-        console.log('=== 微信登录失败 ===');
-        wx.showToast({
-          title: '登录失败',
-          icon: 'none'
-        });
-      }
+      showManualSetup: true
     });
-  },
-
-  // 新版微信登录 - 使用头像昵称填写能力
-  startWechatLogin() {
-    // 显示提示，引导用户使用新的登录方式
-    wx.showModal({
-      title: '登录提示',
-      content: '请点击头像选择您的微信头像，并填写昵称完成登录',
-      confirmText: '开始设置',
-      cancelText: '使用旧版',
-      success: (res) => {
-        if (res.confirm) {
-          // 用户选择使用新版登录方式，不做任何操作，让用户手动选择
-          wx.showToast({
-            title: '请选择头像和昵称',
-            icon: 'none'
-          });
-        } else {
-          // 用户选择使用旧版登录
-          this.getUserProfile();
-        }
-      }
+    
+    wx.showToast({
+      title: '请选择头像和昵称',
+      icon: 'none'
     });
   },
 

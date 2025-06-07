@@ -6,18 +6,15 @@
       <text class="login-title">欢迎使用接龙购物</text>
       <text class="login-desc">登录后可查看我的接龙和参与记录</text>
       
-      <!-- 主要登录按钮 - 微信一键登录 -->
-      <button class="login-btn" wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">
-        <text class="login-btn-text">微信一键登录</text>
+      <!-- 登录按钮 -->
+      <button class="login-btn" bindtap="startLogin" wx:if="{{!showManualSetup}}">
+        <text class="login-btn-text">开始登录</text>
       </button>
       
-      <!-- 备用登录方式 - 手动设置头像昵称 -->
-      <button class="manual-login-btn" bindtap="startWechatLogin">
-        <text class="manual-login-text">手动设置头像昵称</text>
-      </button>
-      
-      <!-- 手动设置区域（当用户选择手动设置时显示） -->
+      <!-- 设置区域（自动显示） -->
       <view class="manual-setup" wx:if="{{showManualSetup}}">
+        <view class="setup-title">设置您的个人信息</view>
+        
         <!-- 头像选择 -->
         <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
           <image class="login-avatar" src="{{userInfo.avatarUrl || '../../images/icons/avatar.png'}}" mode="aspectFill"></image>

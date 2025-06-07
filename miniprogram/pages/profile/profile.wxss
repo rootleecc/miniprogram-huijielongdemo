@@ -87,11 +87,17 @@ page {
   color: #6b7280;
 }
 
-/* 手动设置区域 */
+/* 设置区域 */
 .manual-setup {
-  margin-top: 40rpx;
-  padding-top: 40rpx;
-  border-top: 2rpx solid #f3f4f6;
+  margin-top: 30rpx;
+}
+
+.setup-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 40rpx;
 }
 
 /* 头像选择 */
