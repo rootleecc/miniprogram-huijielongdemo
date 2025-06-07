@@ -6,15 +6,7 @@ Page({
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     myDragons: [],
     myParticipations: [],
-    loading: false,
-    needUpdateProfile: true
-  },
-
-  // 编辑资料
-  editProfile() {
-    this.setData({
-      needUpdateProfile: true
-    });
+    loading: false
   },
 
   onLoad() {
@@ -65,6 +57,28 @@ Page({
         });
       }
     });
+  },
+
+  // 选择头像回调
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail;
+    const userInfo = { ...this.data.userInfo, avatarUrl };
+    this.setData({ userInfo });
+    
+    // 更新全局数据
+    const app = getApp();
+    app.globalData.userInfo = userInfo;
+  },
+
+  // 昵称确认回调
+  onNicknameConfirm(e) {
+    const nickName = e.detail.value;
+    const userInfo = { ...this.data.userInfo, nickName };
+    this.setData({ userInfo });
+    
+    // 更新全局数据
+    const app = getApp();
+    app.globalData.userInfo = userInfo;
   },
 
   // 获取OpenID
@@ -128,34 +142,6 @@ Page({
     const dragonId = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/detail/detail?id=${dragonId}`
-    });
-  },
-
-  // 退出登录
-  logout() {
-    wx.showModal({
-      title: '确认退出',
-      content: '确定要退出登录吗？',
-      success: (res) => {
-        if (res.confirm) {
-          this.setData({
-            userInfo: null,
-            hasUserInfo: false,
-            myDragons: [],
-            myParticipations: []
-          });
-          
-          // 清除全局数据
-          const app = getApp();
-          app.globalData.userInfo = null;
-          app.globalData.openid = null;
-          
-          wx.showToast({
-            title: '已退出登录',
-            icon: 'success'
-          });
-        }
-      }
     });
   },
 
