@@ -93,6 +93,45 @@ page {
   border: 4rpx solid rgba(255, 255, 255, 0.2);
 }
 
+.avatar-wrapper {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-right: 30rpx;
+}
+
+.avatar-wrapper .user-avatar {
+  margin-right: 0;
+}
+
+.avatar-edit {
+  position: absolute;
+  bottom: -5rpx;
+  right: -5rpx;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 10rpx;
+}
+
+.user-name-input {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  border-radius: 20rpx;
+  padding: 8rpx 16rpx;
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+  width: 300rpx;
+}
+
+.user-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .user-name {
   display: block;
   font-size: 36rpx;
@@ -103,6 +142,16 @@ page {
 .user-desc {
   font-size: 26rpx;
   opacity: 0.8;
+}
+
+.edit-profile-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  border-radius: 40rpx;
+  padding: 16rpx 32rpx;
+  font-size: 26rpx;
+  margin-right: 20rpx;
 }
 
 .logout-btn {

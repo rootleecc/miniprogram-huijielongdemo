@@ -17,12 +17,23 @@
     <!-- 用户信息卡片 -->
     <view class="user-card">
       <view class="user-info">
-        <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" wx:if="{{needUpdateProfile}}">
+          <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+          <view class="avatar-edit">编辑</view>
+        </button>
+        <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" wx:else></image>
         <view class="user-details">
-          <text class="user-name">{{userInfo.nickName}}</text>
+          <input class="user-name-input" wx:if="{{needUpdateProfile}}" 
+                 type="nickname" 
+                 placeholder="请输入昵称" 
+                 value="{{userInfo.nickName}}"
+                 bindconfirm="onNicknameConfirm"
+                 confirm-type="done" />
+          <text class="user-name" wx:else>{{userInfo.nickName}}</text>
           <text class="user-desc">接龙购物用户</text>
         </view>
       </view>
+      <button class="edit-profile-btn" wx:if="{{!needUpdateProfile}}" bindtap="editProfile">编辑资料</button>
       <button class="logout-btn" bindtap="logout">退出登录</button>
     </view>
 
