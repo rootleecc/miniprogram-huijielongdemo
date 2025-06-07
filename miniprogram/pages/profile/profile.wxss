@@ -103,13 +103,15 @@ page {
 
 .nickname-input {
   width: 100%;
-  padding: 25rpx 30rpx;
+  padding: 35rpx 30rpx;
   border: 2rpx solid #e5e7eb;
   border-radius: 50rpx;
-  font-size: 30rpx;
+  font-size: 32rpx;
   text-align: center;
   background: #f9fafb;
   box-sizing: border-box;
+  min-height: 100rpx;
+  line-height: 1.4;
 }
 
 .nickname-input:focus {

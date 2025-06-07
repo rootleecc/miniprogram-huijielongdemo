@@ -22,6 +22,18 @@ Page({
     console.log('全局用户信息:', app.globalData.userInfo);
     console.log('全局OpenID:', app.globalData.openid);
     
+    // 初始化临时用户信息
+    this.setData({
+      tempUserInfo: {
+        avatarUrl: '',
+        nickName: ''
+      },
+      userInfo: {
+        avatarUrl: '',
+        nickName: ''
+      }
+    });
+    
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -122,7 +134,22 @@ Page({
     const { avatarUrl } = e.detail;
     this.setData({
       'tempUserInfo.avatarUrl': avatarUrl,
-      'userInfo.avatarUrl': avatarUrl
+      userInfo: {
+        ...this.data.userInfo,
+        avatarUrl: avatarUrl
+      }
+    });
+  },
+
+  // 昵称实时输入回调
+  onNicknameInput(e) {
+    const nickName = e.detail.value;
+    this.setData({
+      'tempUserInfo.nickName': nickName,
+      userInfo: {
+        ...this.data.userInfo,
+        nickName: nickName
+      }
     });
   },
 
@@ -134,7 +161,10 @@ Page({
     const nickName = e.detail.value.trim();
     this.setData({
       'tempUserInfo.nickName': nickName,
-      'userInfo.nickName': nickName
+      userInfo: {
+        ...this.data.userInfo,
+        nickName: nickName
+      }
     });
   },
 
