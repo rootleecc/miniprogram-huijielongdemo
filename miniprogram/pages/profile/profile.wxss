@@ -151,14 +151,14 @@ page {
 
 /* 完成按钮 */
 .complete-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
   color: white;
   border-radius: 50rpx;
   padding: 35rpx 40rpx;
   font-size: 32rpx;
   font-weight: 500;
   border: none;
-  box-shadow: 0 8rpx 24rpx rgba(16, 185, 129, 0.3);
+  box-shadow: 0 8rpx 24rpx rgba(0, 82, 217, 0.3);
   width: 100%;
   min-height: 100rpx;
   display: flex;
