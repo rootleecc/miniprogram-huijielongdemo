@@ -18,31 +18,13 @@ page {
 
 .header-content {
   padding: 60rpx 40rpx 80rpx;
-  display: flex;
-  align-items: center;
   position: relative;
   z-index: 2;
-}
-
-.header-icon {
-  width: 100rpx;
-  height: 100rpx;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 30rpx;
-  backdrop-filter: blur(10rpx);
-  border: 2rpx solid rgba(255, 255, 255, 0.3);
-}
-
-.icon-text {
-  font-size: 50rpx;
+  text-align: center;
 }
 
 .header-text {
-  flex: 1;
+  width: 100%;
 }
 
 .title {
