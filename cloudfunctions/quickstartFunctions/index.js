@@ -499,10 +499,11 @@ const initializeDatabase = async () => {
       details: results
     };
   } catch (error) {
+    console.error('数据库初始化错误:', error);
     return {
       success: false,
       message: "数据库初始化失败",
-      error: error.message
+      error: error.message || '未知错误'
     };
   }
 };
