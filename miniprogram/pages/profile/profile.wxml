@@ -52,7 +52,6 @@
       <view class="empty-state" wx:elif="{{myDragons.length === 0}}">
         <image class="empty-icon" src="../../images/default-goods-image.png"></image>
         <text class="empty-text">还没有发起过接龙</text>
-        <button class="empty-btn" bindtap="createDragon">发起第一个接龙</button>
       </view>
       
       <view class="dragon-list" wx:else>
