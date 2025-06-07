@@ -1,20 +1,17 @@
 <!--pages/create/create.wxml-->
 <view class="container">
   <view class="header">
-    <view class="header-background"></view>
+    <view class="header-wave"></view>
     <view class="header-content">
-      <view class="header-icon">
-        <view class="icon-placeholder">📦</view>
+      <view class="header-main">
+        <view class="header-icon">
+          <text class="icon-text">🛒</text>
+        </view>
+        <view class="header-text">
+          <text class="title">发起接龙</text>
+          <text class="subtitle">创建团购活动，邀请好友参与</text>
+        </view>
       </view>
-      <view class="header-text">
-        <text class="title">发起接龙</text>
-        <text class="subtitle">创建团购活动，邀请好友参与</text>
-      </view>
-    </view>
-    <view class="header-decoration">
-      <view class="decoration-circle circle-1"></view>
-      <view class="decoration-circle circle-2"></view>
-      <view class="decoration-circle circle-3"></view>
     </view>
   </view>
 

@@ -10,125 +10,72 @@ page {
 /* 头部 */
 .header {
   position: relative;
-  background: linear-gradient(135deg, #0052D9 0%, #1e40af 50%, #003ba3 100%);
-  padding: 60rpx 30rpx 50rpx;
+  background: linear-gradient(135deg, #0052D9 0%, #1e40af 100%);
+  padding: 0;
   color: white;
   overflow: hidden;
-  min-height: 200rpx;
+  height: 280rpx;
 }
 
-.header-background {
+.header-wave {
   position: absolute;
-  top: 0;
+  bottom: -2rpx;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
-    linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+  height: 60rpx;
+  background: #f5f7fa;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  z-index: 2;
 }
 
 .header-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  padding: 60rpx 40rpx 80rpx;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.header-main {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
+  justify-content: flex-start;
 }
 
 .header-icon {
-  width: 120rpx;
-  height: 120rpx;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 60rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 30rpx;
+  margin-right: 30rpx;
   backdrop-filter: blur(10rpx);
-  border: 3rpx solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
 }
 
-.icon-placeholder {
-  font-size: 60rpx;
-  line-height: 1;
+.icon-text {
+  font-size: 50rpx;
 }
 
 .header-text {
-  text-align: center;
+  flex: 1;
 }
 
-.header .title {
-  font-size: 52rpx;
-  font-weight: 700;
+.title {
+  font-size: 48rpx;
+  font-weight: 600;
   display: block;
-  margin-bottom: 15rpx;
-  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
-  letter-spacing: 2rpx;
+  margin-bottom: 12rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
 }
 
-.header .subtitle {
-  font-size: 30rpx;
-  opacity: 0.95;
-  font-weight: 400;
+.subtitle {
+  font-size: 28rpx;
+  opacity: 0.9;
   line-height: 1.4;
-  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.15);
-}
-
-.header-decoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.decoration-circle {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  animation: float 6s ease-in-out infinite;
-}
-
-.circle-1 {
-  width: 100rpx;
-  height: 100rpx;
-  top: 20rpx;
-  right: 50rpx;
-  animation-delay: 0s;
-}
-
-.circle-2 {
-  width: 60rpx;
-  height: 60rpx;
-  top: 120rpx;
-  left: 40rpx;
-  animation-delay: 2s;
-}
-
-.circle-3 {
-  width: 80rpx;
-  height: 80rpx;
-  bottom: 30rpx;
-  right: 30rpx;
-  animation-delay: 4s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(-20rpx) scale(1.1);
-    opacity: 0.8;
-  }
+  display: block;
 }
 
 /* 表单 */
@@ -190,12 +137,13 @@ page {
 
 .input, .textarea {
   width: 100%;
-  padding: 20rpx;
+  padding: 25rpx 20rpx;
   border: 2rpx solid #e5e7eb;
   border-radius: 10rpx;
   font-size: 28rpx;
   background: #f9fafb;
   box-sizing: border-box;
+  min-height: 80rpx;
 }
 
 .input:focus, .textarea:focus {
@@ -204,7 +152,7 @@ page {
 }
 
 .textarea {
-  height: 150rpx;
+  height: 180rpx;
   resize: none;
 }
 
@@ -213,7 +161,7 @@ page {
 }
 
 .picker {
-  padding: 20rpx;
+  padding: 25rpx 20rpx;
   border: 2rpx solid #e5e7eb;
   border-radius: 10rpx;
   background: #f9fafb;
