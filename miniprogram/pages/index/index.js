@@ -106,7 +106,18 @@ Page({
   // 创建接龙
   createDragon() {
     if (!this.data.hasUserInfo) {
-      this.getUserInfo();
+      wx.showModal({
+        title: '需要登录',
+        content: '请先登录后再发起接龙',
+        confirmText: '去登录',
+        success: (res) => {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '/pages/profile/profile'
+            });
+          }
+        }
+      });
       return;
     }
     wx.navigateTo({

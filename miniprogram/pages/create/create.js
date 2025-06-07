@@ -19,6 +19,23 @@ Page({
   },
 
   onLoad() {
+    // 检查用户是否已登录
+    const app = getApp();
+    if (!app.globalData.userInfo) {
+      wx.showModal({
+        title: '需要登录',
+        content: '请先登录后再发起接龙',
+        confirmText: '去登录',
+        showCancel: false,
+        success: () => {
+          wx.switchTab({
+            url: '/pages/profile/profile'
+          });
+        }
+      });
+      return;
+    }
+
     // 设置默认截止时间为明天
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -190,12 +207,28 @@ Page({
     if (!this.validateForm()) return;
     if (this.data.submitting) return;
 
+    // 再次检查用户登录状态
+    const app = getApp();
+    if (!app.globalData.userInfo) {
+      wx.showModal({
+        title: '需要登录',
+        content: '请先登录后再发起接龙',
+        confirmText: '去登录',
+        showCancel: false,
+        success: () => {
+          wx.switchTab({
+            url: '/pages/profile/profile'
+          });
+        }
+      });
+      return;
+    }
+
     this.setData({ submitting: true });
     wx.showLoading({ title: '发布中...' });
 
     try {
-      // 获取用户信息
-      const app = getApp();
+      // 获取用户OpenID
       if (!app.globalData.openid) {
         const openidRes = await wx.cloud.callFunction({
           name: 'quickstartFunctions',
@@ -222,7 +255,26 @@ Page({
         updateTime: new Date().toLocaleString()
       };
 
-      await db.collection('dragons').add({ data: dragonData });
+      try {
+        // 尝试添加接龙数据
+        await db.collection('dragons').add({ data: dragonData });
+      } catch (dbError) {
+        // 如果集合不存在，先创建集合再添加数据
+        if (dbError.errCode === -502005) {
+          console.log('数据库集合不存在，正在创建...');
+          
+          // 创建集合（不包含示例数据）
+          await wx.cloud.callFunction({
+            name: 'quickstartFunctions',
+            data: { type: 'createDragonsCollection' }
+          });
+          
+          // 重新尝试添加数据
+          await db.collection('dragons').add({ data: dragonData });
+        } else {
+          throw dbError;
+        }
+      }
 
       wx.hideLoading();
       wx.showToast({ title: '发布成功' });

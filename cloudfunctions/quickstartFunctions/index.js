@@ -33,7 +33,7 @@ const getMiniProgramCode = async () => {
 // 创建集合
 const createCollection = async () => {
   try {
-    // 创建 dragons 集合
+    // 创建 dragons 集合并添加示例数据（仅用于演示）
     await db.createCollection("dragons");
     
     // 添加示例接龙数据
@@ -211,6 +211,24 @@ const createCollection = async () => {
   }
 };
 
+// 创建 dragons 集合（不包含示例数据）
+const createDragonsCollection = async () => {
+  try {
+    // 仅创建集合，不添加示例数据
+    await db.createCollection("dragons");
+    return {
+      success: true,
+      message: "dragons集合创建成功"
+    };
+  } catch (e) {
+    // 如果集合已经存在，返回成功
+    return {
+      success: true,
+      message: "dragons集合已存在或创建成功"
+    };
+  }
+};
+
 // 创建销售数据集合（保留原有功能）
 const createSalesCollection = async () => {
   try {
@@ -337,6 +355,8 @@ exports.main = async (event, context) => {
       return await getMiniProgramCode();
     case "createCollection":
       return await createCollection();
+    case "createDragonsCollection":
+      return await createDragonsCollection();
     case "createSalesCollection":
       return await createSalesCollection();
     case "selectRecord":
