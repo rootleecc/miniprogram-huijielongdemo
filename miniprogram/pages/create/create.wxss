@@ -4,42 +4,24 @@ page {
 }
 
 .container {
-  padding-bottom: 100rpx;
+  padding-bottom: 120rpx;
 }
 
-/* 头部 */
+/* 头部区域 */
 .header {
   position: relative;
-  background: linear-gradient(135deg, #0052D9 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
   padding: 0;
   color: white;
   overflow: hidden;
-  height: 280rpx;
-}
-
-.header-wave {
-  position: absolute;
-  bottom: -2rpx;
-  left: 0;
-  right: 0;
-  height: 60rpx;
-  background: #f5f7fa;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  z-index: 2;
 }
 
 .header-content {
-  position: relative;
-  z-index: 3;
   padding: 60rpx 40rpx 80rpx;
-  height: 100%;
-  box-sizing: border-box;
-}
-
-.header-main {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  position: relative;
+  z-index: 2;
 }
 
 .header-icon {
@@ -78,9 +60,28 @@ page {
   display: block;
 }
 
+.header-wave {
+  position: absolute;
+  bottom: -2rpx;
+  left: 0;
+  right: 0;
+  height: 60rpx;
+  background: #f5f7fa;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  z-index: 1;
+}
+
+/* 内容区域 */
+.content {
+  padding: 0 30rpx;
+  margin-top: -30rpx;
+  position: relative;
+  z-index: 3;
+}
+
 /* 表单 */
 .form {
-  padding: 0 30rpx;
+  width: 100%;
 }
 
 .section {
@@ -111,6 +112,11 @@ page {
   border-radius: 30rpx;
   padding: 10rpx 20rpx;
   font-size: 24rpx;
+  border: none;
+}
+
+.add-btn::after {
+  border: none;
 }
 
 /* 表单项 */
@@ -166,6 +172,10 @@ page {
   border-radius: 10rpx;
   background: #f9fafb;
   color: #1f2937;
+  min-height: 80rpx;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 /* 商品列表 */
@@ -196,6 +206,11 @@ page {
   border-radius: 20rpx;
   padding: 8rpx 16rpx;
   font-size: 22rpx;
+  border: none;
+}
+
+.remove-btn::after {
+  border: none;
 }
 
 /* 图片上传 */
@@ -259,6 +274,7 @@ page {
   background: white;
   padding: 20rpx 30rpx;
   border-top: 1rpx solid #e5e7eb;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
 }
 
 .submit-btn {
@@ -270,9 +286,16 @@ page {
   font-size: 32rpx;
   font-weight: bold;
   text-align: center;
+  border: none;
+  box-shadow: 0 4rpx 16rpx rgba(0, 82, 217, 0.3);
+}
+
+.submit-btn::after {
+  border: none;
 }
 
 .submit-btn.disabled {
   background: #d1d5db;
   opacity: 0.6;
+  box-shadow: none;
 }
