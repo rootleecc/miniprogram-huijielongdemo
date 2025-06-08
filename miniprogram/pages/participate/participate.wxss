@@ -85,27 +85,28 @@ page {
   font-weight: bold;
 }
 
-/* 数量控制 */
+/* 数量控制 - TDesign风格 */
 .quantity-control {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 15rpx;
-  gap: 20rpx;
+  gap: 15rpx;
 }
 
 .quantity-btn {
-  width: 60rpx;
-  height: 60rpx;
-  border-radius: 50%;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 8rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32rpx;
+  font-size: 24rpx;
   font-weight: bold;
   color: white;
   border: none;
   padding: 0;
+  transition: all 0.2s ease;
 }
 
 .quantity-btn::after {
@@ -113,22 +114,40 @@ page {
 }
 
 .quantity-btn.decrease {
-  background: #ef4444;
+  background: #e34d59;
+  box-shadow: 0 2rpx 8rpx rgba(227, 77, 89, 0.3);
+}
+
+.quantity-btn.decrease:active {
+  background: #d73d49;
+  transform: scale(0.95);
 }
 
 .quantity-btn.increase {
-  background: #10b981;
+  background: #00a870;
+  box-shadow: 0 2rpx 8rpx rgba(0, 168, 112, 0.3);
+}
+
+.quantity-btn.increase:active {
+  background: #009865;
+  transform: scale(0.95);
 }
 
 .quantity-input {
-  width: 120rpx;
-  height: 60rpx;
+  width: 100rpx;
+  height: 48rpx;
   text-align: center;
-  border: 2rpx solid #e5e7eb;
-  border-radius: 10rpx;
+  border: 2rpx solid #dcdcdc;
+  border-radius: 8rpx;
   font-size: 28rpx;
   background: white;
   box-sizing: border-box;
+  line-height: 44rpx;
+}
+
+.quantity-input:focus {
+  border-color: #0052D9;
+  outline: none;
 }
 
 .item-total {
@@ -154,22 +173,26 @@ page {
 
 .input, .textarea {
   width: 100%;
-  padding: 20rpx;
+  padding: 25rpx 20rpx;
   border: 2rpx solid #e5e7eb;
   border-radius: 10rpx;
   font-size: 28rpx;
   background: #f9fafb;
   box-sizing: border-box;
+  min-height: 80rpx;
+  line-height: 1.4;
 }
 
 .input:focus, .textarea:focus {
   border-color: #0052D9;
   background: white;
+  outline: none;
 }
 
 .textarea {
-  height: 120rpx;
+  height: 140rpx;
   resize: none;
+  padding-top: 20rpx;
 }
 
 /* 订单汇总 */
@@ -240,7 +263,7 @@ page {
   bottom: 0;
   left: 0;
   right: 0;
-  background: white;
+  background: #f5f7fa;
   padding: 20rpx 30rpx;
   border-top: 1rpx solid #e5e7eb;
   box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
@@ -259,13 +282,21 @@ page {
   text-align: center;
   border: none;
   box-sizing: border-box;
+  box-shadow: 0 4rpx 16rpx rgba(0, 82, 217, 0.3);
+  transition: all 0.2s ease;
 }
 
 .submit-btn::after {
   border: none;
 }
 
+.submit-btn:active:not(.disabled) {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(0, 82, 217, 0.4);
+}
+
 .submit-btn.disabled {
   background: #d1d5db;
   opacity: 0.6;
+  box-shadow: none;
 }
