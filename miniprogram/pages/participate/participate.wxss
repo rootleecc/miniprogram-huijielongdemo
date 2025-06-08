@@ -106,7 +106,7 @@ page {
 }
 
 .quantity-btn {
-  width: 60rpx;
+  width: 20rpx;
   height: 60rpx;
   border-radius: 8rpx;
   display: flex;
