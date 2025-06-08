@@ -8,14 +8,6 @@
     </view>
   </view>
 
-  <!-- 快捷操作 -->
-  <view class="quick-actions">
-    <view class="action-item" bindtap="createDragon">
-      <image class="action-icon" src="../../images/icons/goods.png"></image>
-      <text class="action-text">发起接龙</text>
-    </view>
-  </view>
-
   <!-- 接龙列表 -->
   <view class="dragon-list">
     <view class="list-header">

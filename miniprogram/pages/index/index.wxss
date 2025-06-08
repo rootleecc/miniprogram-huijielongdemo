@@ -29,35 +29,6 @@ page {
   opacity: 0.9;
 }
 
-/* 快捷操作 */
-.quick-actions {
-  background: white;
-  margin: 20rpx;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 82, 217, 0.1);
-}
-
-.action-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 20rpx;
-}
-
-.action-icon {
-  width: 60rpx;
-  height: 60rpx;
-  margin-bottom: 15rpx;
-}
-
-.action-text {
-  font-size: 28rpx;
-  color: #1f2937;
-  font-weight: 500;
-}
-
 /* 接龙列表 */
 .dragon-list {
   margin: 20rpx;

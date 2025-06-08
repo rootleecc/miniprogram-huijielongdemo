@@ -89,13 +89,6 @@ Page({
     });
   },
 
-  // 创建接龙
-  createDragon() {
-    wx.navigateTo({
-      url: '/pages/create/create'
-    });
-  },
-
   // 下拉刷新
   onPullDownRefresh() {
     this.loadDragonList().then(() => {
