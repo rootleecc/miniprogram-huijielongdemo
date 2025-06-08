@@ -11,15 +11,17 @@
       <view class="section-title">选择商品</view>
       <view class="goods-list">
         <view class="goods-item" wx:for="{{selectedItems}}" wx:key="goodsIndex">
-          <view class="goods-info">
-            <view class="goods-name">{{item.goodsName}}</view>
-            <view class="goods-price">¥{{item.price}}/{{item.unit}}</view>
-          </view>
-          
-          <view class="quantity-control">
-            <button class="quantity-btn decrease" bindtap="changeQuantity" data-index="{{index}}" data-type="decrease">-</button>
-            <input class="quantity-input" type="number" value="{{item.quantity}}" bindinput="onQuantityInput" data-index="{{index}}"/>
-            <button class="quantity-btn increase" bindtap="changeQuantity" data-index="{{index}}" data-type="increase">+</button>
+          <view class="goods-header">
+            <view class="goods-info">
+              <view class="goods-name">{{item.goodsName}}</view>
+              <view class="goods-price">¥{{item.price}}/{{item.unit}}</view>
+            </view>
+            
+            <view class="quantity-control">
+              <button class="quantity-btn decrease" bindtap="changeQuantity" data-index="{{index}}" data-type="decrease">-</button>
+              <input class="quantity-input" type="number" value="{{item.quantity}}" bindinput="onQuantityInput" data-index="{{index}}"/>
+              <button class="quantity-btn increase" bindtap="changeQuantity" data-index="{{index}}" data-type="increase">+</button>
+            </view>
           </view>
           
           <view class="item-total" wx:if="{{item.quantity > 0}}">
