@@ -412,6 +412,50 @@ Page({
     }
   },
 
+  // 删除接龙
+  async deleteDragon(e) {
+    const dragonId = e.currentTarget.dataset.id;
+    const dragonTitle = e.currentTarget.dataset.title;
+    
+    wx.showModal({
+      title: '确认删除',
+      content: `确定要删除接龙"${dragonTitle}"吗？此操作不可恢复。`,
+      confirmText: '删除',
+      confirmColor: '#ef4444',
+      success: async (res) => {
+        if (res.confirm) {
+          wx.showLoading({ title: '删除中...' });
+          
+          try {
+            const db = wx.cloud.database();
+            await db.collection('dragons').doc(dragonId).remove();
+            
+            // 记录删除行为
+            await this.logUserAction('delete_dragon', {
+              dragonId: dragonId,
+              dragonTitle: dragonTitle
+            });
+            
+            wx.hideLoading();
+            wx.showToast({ title: '删除成功' });
+            
+            // 重新加载列表
+            this.loadMyDragons();
+            this.loadStatistics();
+            
+          } catch (error) {
+            console.error('删除接龙失败:', error);
+            wx.hideLoading();
+            wx.showToast({
+              title: '删除失败',
+              icon: 'none'
+            });
+          }
+        }
+      }
+    });
+  },
+
   // 加载我参与的接龙
   async loadMyParticipations() {
     this.setData({ loading: true });

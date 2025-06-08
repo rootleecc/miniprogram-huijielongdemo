@@ -419,6 +419,33 @@ page {
   color: #9ca3af;
 }
 
+/* 接龙操作按钮 */
+.dragon-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 15rpx;
+  padding-top: 15rpx;
+  border-top: 1rpx solid #e5e7eb;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border-radius: 30rpx;
+  padding: 10rpx 25rpx;
+  font-size: 24rpx;
+  border: none;
+  box-shadow: 0 2rpx 8rpx rgba(239, 68, 68, 0.3);
+}
+
+.delete-btn::after {
+  border: none;
+}
+
+.delete-btn:active {
+  transform: scale(0.95);
+}
+
 /* 功能菜单 */
 .menu-section {
   margin: 20rpx;

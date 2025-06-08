@@ -5,6 +5,8 @@ page {
 
 .container {
   padding-bottom: 120rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 头部 */
@@ -13,6 +15,8 @@ page {
   padding: 40rpx 30rpx 30rpx;
   color: white;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header .title {
@@ -30,6 +34,8 @@ page {
 /* 内容区域 */
 .content {
   padding: 0 30rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .section {
@@ -38,6 +44,8 @@ page {
   padding: 30rpx;
   margin: 30rpx 0;
   box-shadow: 0 4rpx 20rpx rgba(0, 82, 217, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .section-title {
@@ -56,6 +64,8 @@ page {
   padding: 25rpx;
   margin-bottom: 20rpx;
   background: #f9fafb;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .goods-info {
@@ -81,6 +91,7 @@ page {
   align-items: center;
   justify-content: center;
   margin-bottom: 15rpx;
+  gap: 20rpx;
 }
 
 .quantity-btn {
@@ -93,6 +104,12 @@ page {
   font-size: 32rpx;
   font-weight: bold;
   color: white;
+  border: none;
+  padding: 0;
+}
+
+.quantity-btn::after {
+  border: none;
 }
 
 .quantity-btn.decrease {
@@ -109,8 +126,9 @@ page {
   text-align: center;
   border: 2rpx solid #e5e7eb;
   border-radius: 10rpx;
-  margin: 0 20rpx;
   font-size: 28rpx;
+  background: white;
+  box-sizing: border-box;
 }
 
 .item-total {
@@ -123,6 +141,7 @@ page {
 /* 表单项 */
 .form-item {
   margin-bottom: 30rpx;
+  width: 100%;
 }
 
 .label {
@@ -158,6 +177,8 @@ page {
   background: #eff6ff;
   border-radius: 15rpx;
   padding: 25rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .summary-item {
@@ -222,6 +243,9 @@ page {
   background: white;
   padding: 20rpx 30rpx;
   border-top: 1rpx solid #e5e7eb;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .submit-btn {
@@ -233,6 +257,12 @@ page {
   font-size: 32rpx;
   font-weight: bold;
   text-align: center;
+  border: none;
+  box-sizing: border-box;
+}
+
+.submit-btn::after {
+  border: none;
 }
 
 .submit-btn.disabled {

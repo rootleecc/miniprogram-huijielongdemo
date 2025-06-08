@@ -99,6 +99,13 @@
               <text class="dragon-participants">{{item.participantCount || 0}}人参与</text>
               <text class="dragon-time">{{item.createTime}}</text>
             </view>
+            
+            <!-- 删除按钮 - 仅在无人参与时显示 -->
+            <view class="dragon-actions" wx:if="{{(item.participantCount || 0) === 0}}">
+              <button class="delete-btn" bindtap="deleteDragon" data-id="{{item._id}}" data-title="{{item.title}}" catchtap="true">
+                删除接龙
+              </button>
+            </view>
           </view>
         </view>
       </view>
@@ -159,23 +166,6 @@
       <view class="menu-item" bindtap="aboutUs">
         <view class="menu-item-content">
           <text class="menu-text">关于我们</text>
-        </view>
-        <text class="menu-arrow">></text>
-      </view>
-      
-      <!-- 调试功能 - 仅开发环境显示 -->
-      <view class="menu-item" bindtap="checkDatabaseData">
-        <view class="menu-item-content">
-          <text class="menu-text">查看数据库数据</text>
-          <text class="menu-desc">调试功能：查看当前用户的数据库记录</text>
-        </view>
-        <text class="menu-arrow">></text>
-      </view>
-      
-      <view class="menu-item" bindtap="initializeDatabase">
-        <view class="menu-item-content">
-          <text class="menu-text">初始化数据库</text>
-          <text class="menu-desc">调试功能：创建所有必要的数据库集合</text>
         </view>
         <text class="menu-arrow">></text>
       </view>
