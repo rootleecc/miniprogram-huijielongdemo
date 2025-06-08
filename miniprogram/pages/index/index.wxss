@@ -10,7 +10,7 @@ page {
 /* 头部区域 */
 .header {
   background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
-  padding: 40rpx 15rpx 30rpx;
+  padding: 40rpx 20rpx 30rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,8 +31,8 @@ page {
 
 /* 接龙列表 */
 .dragon-list {
-  margin: 15rpx 10rpx;
-  padding: 0 5rpx;
+  margin: 15rpx 20rpx;
+  padding: 0;
 }
 
 .list-header {
@@ -40,7 +40,7 @@ page {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15rpx;
-  padding: 0 5rpx;
+  padding: 0;
 }
 
 .list-title {
@@ -87,9 +87,11 @@ page {
 .dragon-item {
   background: white;
   border-radius: 20rpx;
-  padding: 25rpx;
+  padding: 30rpx;
   margin-bottom: 15rpx;
   box-shadow: 0 4rpx 20rpx rgba(0, 82, 217, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 
