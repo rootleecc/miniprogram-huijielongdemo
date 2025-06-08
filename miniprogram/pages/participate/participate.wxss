@@ -106,13 +106,13 @@ page {
 }
 
 .quantity-btn {
-  width: 24rpx;
-  height: 24rpx;
+  width: 20rpx;
+  height: 20rpx;
   border-radius: 4rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14rpx;
+  font-size: 12rpx;
   font-weight: bold;
   color: white;
   border: none;
@@ -144,12 +144,12 @@ page {
 }
 
 .quantity-input {
-  width: 50rpx;
-  height: 24rpx;
+  width: 40rpx;
+  height: 20rpx;
   text-align: center;
   border: none;
   border-radius: 4rpx;
-  font-size: 18rpx;
+  font-size: 16rpx;
   background: white;
   box-sizing: border-box;
   line-height: 20rpx;
