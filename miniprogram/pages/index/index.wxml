@@ -35,6 +35,30 @@
       
       <view class="dragon-desc" bindtap="viewDragon" data-id="{{item._id}}">{{item.description}}</view>
       
+      <!-- 商品图片展示 -->
+      <view class="goods-preview" wx:if="{{item.goods && item.goods.length > 0}}" bindtap="viewDragon" data-id="{{item._id}}">
+        <view class="goods-images">
+          <image 
+            class="goods-image" 
+            wx:for="{{item.goods}}" 
+            wx:key="index" 
+            wx:for-item="goods"
+            wx:if="{{goods.images && goods.images.length > 0 && index < 3}}"
+            src="{{goods.images[0]}}" 
+            mode="aspectFill"
+          ></image>
+          <view class="more-indicator" wx:if="{{item.goods.length > 3}}">
+            <text class="more-text">+{{item.goods.length - 3}}</text>
+          </view>
+        </view>
+        <view class="goods-names">
+          <text class="goods-name-item" wx:for="{{item.goods}}" wx:key="index" wx:for-item="goods" wx:if="{{index < 2}}">
+            {{goods.name}}
+          </text>
+          <text class="more-goods" wx:if="{{item.goods.length > 2}}">等{{item.goods.length}}种商品</text>
+        </view>
+      </view>
+      
       <view class="dragon-info" bindtap="viewDragon" data-id="{{item._id}}">
         <view class="info-item">
           <text class="info-label">发起人:</text>
