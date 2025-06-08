@@ -6,10 +6,6 @@
       <text class="title">接龙购物</text>
       <text class="subtitle">社群团购，优惠共享</text>
     </view>
-    <view class="user-info" wx:if="{{hasUserInfo}}">
-      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-    </view>
-    <button class="login-btn" wx:else bindtap="getUserInfo">登录</button>
   </view>
 
   <!-- 快捷操作 -->

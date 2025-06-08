@@ -29,22 +29,6 @@ page {
   opacity: 0.9;
 }
 
-.user-info .avatar {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 50%;
-  border: 3rpx solid rgba(255,255,255,0.3);
-}
-
-.login-btn {
-  background: rgba(255,255,255,0.2);
-  color: white;
-  border: 2rpx solid rgba(255,255,255,0.3);
-  border-radius: 50rpx;
-  padding: 15rpx 30rpx;
-  font-size: 28rpx;
-}
-
 /* 快捷操作 */
 .quick-actions {
   background: white;
