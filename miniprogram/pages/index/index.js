@@ -89,6 +89,33 @@ Page({
     });
   },
 
+  // 参与接龙
+  participateDragon(e) {
+    const dragonId = e.currentTarget.dataset.id;
+    
+    // 检查用户是否已登录
+    const app = getApp();
+    if (!app.globalData.userInfo) {
+      wx.showModal({
+        title: '需要登录',
+        content: '请先登录后再参与接龙',
+        confirmText: '去登录',
+        success: (res) => {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '/pages/profile/profile'
+            });
+          }
+        }
+      });
+      return;
+    }
+    
+    wx.navigateTo({
+      url: `/pages/participate/participate?id=${dragonId}`
+    });
+  },
+
   // 下拉刷新
   onPullDownRefresh() {
     this.loadDragonList().then(() => {

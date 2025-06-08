@@ -11,7 +11,7 @@
   <!-- 接龙列表 -->
   <view class="dragon-list">
     <view class="list-header">
-      <text class="list-title">最新接龙</text>
+      <text class="list-title">种草广场</text>
       <text class="list-count">{{dragonList.length}}个</text>
     </view>
     
@@ -22,10 +22,10 @@
     <view class="empty" wx:elif="{{dragonList.length === 0}}">
       <image class="empty-icon" src="../../images/default-goods-image.png"></image>
       <text class="empty-text">暂无接龙活动</text>
-      <button class="create-btn" bindtap="createDragon">发起第一个接龙</button>
+      <navigator url="/pages/create/create" class="create-btn">发起第一个接龙</navigator>
     </view>
     
-    <view class="dragon-item" wx:for="{{dragonList}}" wx:key="_id" bindtap="viewDragon" data-id="{{item._id}}">
+    <view class="dragon-item" wx:for="{{dragonList}}" wx:key="_id">
       <view class="dragon-header">
         <view class="dragon-title">{{item.title}}</view>
         <view class="dragon-status {{item.status === 'active' ? 'active' : 'ended'}}">
@@ -33,9 +33,9 @@
         </view>
       </view>
       
-      <view class="dragon-desc">{{item.description}}</view>
+      <view class="dragon-desc" bindtap="viewDragon" data-id="{{item._id}}">{{item.description}}</view>
       
-      <view class="dragon-info">
+      <view class="dragon-info" bindtap="viewDragon" data-id="{{item._id}}">
         <view class="info-item">
           <text class="info-label">发起人:</text>
           <text class="info-value">{{item.creatorName}}</text>
@@ -46,8 +46,18 @@
         </view>
       </view>
       
-      <view class="dragon-time">
+      <view class="dragon-time" bindtap="viewDragon" data-id="{{item._id}}">
         <text class="time-text">{{item.createTime}}</text>
+      </view>
+      
+      <!-- 参与接龙按钮 -->
+      <view class="dragon-actions">
+        <button class="participate-btn" wx:if="{{item.status === 'active'}}" bindtap="participateDragon" data-id="{{item._id}}">
+          参与接龙
+        </button>
+        <button class="participate-btn disabled" wx:else disabled>
+          接龙已结束
+        </button>
       </view>
     </view>
   </view>

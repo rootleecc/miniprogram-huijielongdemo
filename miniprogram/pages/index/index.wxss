@@ -10,7 +10,7 @@ page {
 /* 头部区域 */
 .header {
   background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
-  padding: 40rpx 30rpx 30rpx;
+  padding: 40rpx 15rpx 30rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,14 +31,16 @@ page {
 
 /* 接龙列表 */
 .dragon-list {
-  margin: 20rpx;
+  margin: 15rpx 10rpx;
+  padding: 0 5rpx;
 }
 
 .list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20rpx;
+  margin-bottom: 15rpx;
+  padding: 0 5rpx;
 }
 
 .list-title {
@@ -77,21 +79,19 @@ page {
   border-radius: 50rpx;
   padding: 20rpx 40rpx;
   font-size: 28rpx;
+  text-decoration: none;
+  display: inline-block;
 }
 
 /* 接龙项目 */
 .dragon-item {
   background: white;
   border-radius: 20rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
+  padding: 25rpx;
+  margin-bottom: 15rpx;
   box-shadow: 0 4rpx 20rpx rgba(0, 82, 217, 0.1);
-  transition: transform 0.2s;
 }
 
-.dragon-item:active {
-  transform: scale(0.98);
-}
 
 .dragon-header {
   display: flex;
@@ -127,12 +127,14 @@ page {
   color: #6b7280;
   margin-bottom: 20rpx;
   line-height: 1.5;
+  cursor: pointer;
 }
 
 .dragon-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15rpx;
+  cursor: pointer;
 }
 
 .info-item {
@@ -150,9 +152,46 @@ page {
 
 .dragon-time {
   text-align: right;
+  margin-bottom: 20rpx;
+  cursor: pointer;
 }
 
 .time-text {
   font-size: 22rpx;
   color: #d1d5db;
+}
+
+/* 接龙操作按钮 */
+.dragon-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 15rpx;
+  padding-top: 15rpx;
+  border-top: 1rpx solid #f3f4f6;
+}
+
+.participate-btn {
+  background: linear-gradient(135deg, #0052D9 0%, #003ba3 100%);
+  color: white;
+  border-radius: 50rpx;
+  padding: 15rpx 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 4rpx 16rpx rgba(0, 82, 217, 0.3);
+  min-width: 200rpx;
+}
+
+.participate-btn::after {
+  border: none;
+}
+
+.participate-btn.disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  box-shadow: none;
+}
+
+.participate-btn:active:not(.disabled) {
+  transform: scale(0.95);
 }
