@@ -106,7 +106,7 @@ page {
 }
 
 .quantity-btn {
-  width: 20rpx;
+  width: 50rpx;
   height: 60rpx;
   border-radius: 8rpx;
   display: flex;
@@ -119,7 +119,7 @@ page {
   padding: 0;
   transition: all 0.2s ease;
   box-shadow: none;
-  min-width: 60rpx;
+  min-width: 50rpx;
   min-height: 60rpx;
 }
 
